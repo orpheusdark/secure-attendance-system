@@ -46,7 +46,7 @@ Our system combines **three verification layers**:
 ---
 
 ## 🏗️ System Workflow
-![System Workflow](docs/system-workflow.png) <!-- diagram will be added later -->
+<!-- diagram will be added later -->
 
 🔗 Detailed docs:  
 - [System Workflow](docs/system-workflow.md)  
