@@ -1,8 +1,6 @@
 # 🚀 Future Scope – Secure Attendance System
 
-This document outlines the **future improvements, scalability options, and research directions** for the Secure Attendance System.
 
----
 
 ## 1️⃣ Scalability & Deployment
 
@@ -81,6 +79,3 @@ This document outlines the **future improvements, scalability options, and resea
   Run geofence + beacon checks on **mobile edge devices** to reduce server load.  
 
 ---
-
-✅ With these upgrades, the system can evolve from a **hackathon prototype → full-scale enterprise solution**,  
-used across **education, corporate training, and professional certification programs**.
