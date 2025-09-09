@@ -1,4 +1,3 @@
-
 # 📌 Secure Attendance System  
 **A Proxy-Proof, Geo-Verified, QR/Beacon Based Attendance Platform**
 
@@ -22,7 +21,7 @@ Traditional attendance methods (manual, biometric, RFID) suffer from:
 - ❌ Limited scalability in large institutions  
 - ❌ Lack of real-time analytics  
 
-We solve this with a **digital-first, cost-effective, and secure attendance system**.
+
 
 ---
 
@@ -99,36 +98,13 @@ Our system combines **three verification layers**:
 
 👉 Full doc: [Future Scope](docs/future-scope.md)
 
----
 
-## 📦 Repo Structure
-```
 
-📂 secure-attendance-system
-┣ 📂 docs
-┃ ┣ system-workflow\.md
-┃ ┣ sequence-diagrams.md
-┃ ┣ tech-stack.md
-┃ ┣ future-scope.md
-┣ 📂 frontend (React Native + React.js)
-┣ 📂 backend (Node.js + Express + MongoDB)
-┣ README.md
-
-```
-
----
-
-## ⚡ Getting Started (MVP Phase)
-1. Clone repo → `git clone https://github.com/your-username/secure-attendance-system.git`
-2. Install dependencies → `npm install`
-3. Setup `.env` with DB + API keys.
-4. Run backend → `npm run dev`
-5. Run frontend (Expo) → `npm start`
 
 ---
 
 ## 🏆 Impact
-This project ensures:  
+ 
 - **No Proxy Attendance** (multi-factor verification).  
 - **Low-cost deployment** (no hardware needed beyond smartphones).  
 - **Real-time monitoring** for teachers & HODs.  
