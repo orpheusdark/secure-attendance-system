@@ -1,10 +1,7 @@
 
 # 📑 System Workflow – Secure Attendance System
 
-This document explains the **workflow of the attendance system** across different user roles: **Student, Teacher, HOD, and Admin**.  
-The solution ensures attendance is **proxy-proof** using **Geo-fenced OTP** and **Reverse QR/Beacon confirmation**.
 
----
 
 ## 🔑 Core Workflow (End-to-End)
 
@@ -104,9 +101,7 @@ Pending Attendance  →  Teacher Confirmation  →  Confirmed Attendance
 
 ---
 
-✅ With this workflow, **proxy attendance becomes nearly impossible**, as attendance requires **OTP + location + teacher confirmation**.
 
-```
 
----
+
 
