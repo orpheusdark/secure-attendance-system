@@ -1,10 +1,6 @@
 
 # 📑 Sequence Diagrams – Secure Attendance System
 
-This document provides **textual UML-style sequence diagrams** for each role (Student, Teacher, HOD, Admin).  
-It describes how components interact in the system for secure, proxy-proof attendance.
-
----
 
 ## 👨‍🎓 Student Attendance Flow
 
@@ -106,7 +102,4 @@ Backend → Database: Save settings + apply globally
 
 ---
 
-✅ These sequence diagrams show **step-by-step system interactions** for each user role.  
-They can later be converted into **PlantUML / Mermaid diagrams** if needed for visuals.
-```
 
