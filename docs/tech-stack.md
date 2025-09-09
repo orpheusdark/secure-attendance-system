@@ -1,9 +1,6 @@
 # ⚙️ Tech Stack – Secure Attendance System
 
-This document lists the **technologies, frameworks, and tools** chosen for building the proxy-proof attendance system.  
-Each choice is justified based on scalability, performance, and ease of development.
 
----
 
 ## 🌐 Frontend
 
@@ -115,10 +112,4 @@ Each choice is justified based on scalability, performance, and ease of developm
 | Admin   | Web Dashboard       | User management, system settings, logs     |
 
 ---
-
-✅ This tech stack ensures:  
-- **Scalability** → Works for small classes or large universities.  
-- **Security** → Prevents proxy attendance with multi-factor checks.  
-- **Cross-platform support** → Android, iOS, and Web.  
-- **Maintainability** → Modular, open-source libraries.
 
