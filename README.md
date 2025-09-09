@@ -31,8 +31,8 @@ Our system combines **three verification layers**:
 1. **Geo-Fenced OTP Attendance**  
    - Student requests OTP inside the classroom geofence.  
    - OTP expires within minutes to prevent sharing.  
-
-2. **Reverse QR / Beacon Confirmation**  
+ 
+2. **Reverse QR / Beacon Confirmation** (Time Consuming🚫) 
    - Teacher scans student’s reverse QR OR verifies via Bluetooth beacon.  
    - Ensures physical presence in class.  
 
