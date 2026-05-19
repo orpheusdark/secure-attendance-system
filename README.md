@@ -1,121 +1,57 @@
-# 📌 Secure Attendance System  
-**A Proxy-Proof, Geo-Verified, QR/Beacon Based Attendance Platform**
+# Secure Attendance Ecosystem
 
----
+Enterprise-grade attendance platform with anti-fraud verification, live monitoring, and mobile-first workflows.
 
-## 🚀 Overview
-Attendance in classrooms is often manipulated using **proxy attendance (friends marking attendance on behalf of others)**.  
-Our solution ensures **secure, location-verified, and teacher-confirmed attendance** using a **Geo-fenced OTP + Reverse QR/Beacon** mechanism.  
+This repository now contains a production-oriented monorepo scaffold for:
 
-This project is built to be:  
-✅ **Scalable** – Works for classrooms, entire universities, or corporate trainings.  
-✅ **Secure** – Multi-factor verification to prevent breaches.  
-✅ **Cross-Platform** – Mobile apps + Web dashboards for all stakeholders.  
+- Expo React Native mobile app
+- Next.js web dashboard
+- NestJS backend API
+- PostgreSQL Prisma schema
+- Redis and Socket.IO real-time infrastructure
+- Shared security and contract packages
 
----
+## What changed
 
-## 🎯 Problem Statement
-Traditional attendance methods (manual, biometric, RFID) suffer from:  
-- ❌ Proxy attendance  
-- ❌ High cost of biometric hardware  
-- ❌ Limited scalability in large institutions  
-- ❌ Lack of real-time analytics  
+The original repository described a QR/geofence attendance app. The current implementation expands that into a hardened attendance ecosystem with:
 
+- Rolling signed QR tokens
+- Location-aware fraud scoring
+- Device-bound session logic
+- WebSocket live feeds
+- Notifications and analytics modules
+- Role-aware mobile and web entry points
 
+## Repository layout
 
----
+- `apps/api` - NestJS API, websocket gateway, attendance engine, auth, notifications, analytics
+- `apps/mobile` - Expo Router app for student and teacher workflows
+- `apps/web` - Next.js console for admin, teacher, and student dashboards
+- `packages/contracts` - Shared Zod schemas and TypeScript contracts
+- `packages/security` - Geo, token, and fraud helpers
+- `packages/ui` - Shared UI utilities
+- `apps/api/prisma` - PostgreSQL schema for institutions, sessions, records, logs, and analytics cache
+- `infra` - Docker Compose and deployment scaffolding
 
-## 💡 Proposed Solution
-Our system combines **three verification layers**:
+## Core capabilities in this scaffold
 
-1. **Geo-Fenced OTP Attendance**  
-   - Student requests OTP inside the classroom geofence.  
-   - OTP expires within minutes to prevent sharing.  
- 
-2. **Reverse QR / Beacon Confirmation** (Time Consuming🚫) 
-   - Teacher scans student’s reverse QR OR verifies via Bluetooth beacon.  
-   - Ensures physical presence in class.  
+- JWT-ready auth/session architecture with refresh rotation
+- Dynamic attendance session creation with rotating QR payloads
+- Fraud scoring for replay, spoofing, stale QR, and suspicious behavior
+- Attendance status lifecycle: present, late, suspicious, rejected, manual review
+- Notification and analytics entry points for live operations
 
-3. **Role-Based Dashboard Access**  
-   - Students → Mobile app for check-in.  
-   - Teachers → OTP generation & student verification.  
-   - HOD → Analytics & class-wise reports.  
-   - Admin → System-wide management & logs.  
+## Docs
 
----
+- [System Workflow](docs/system-workflow.md)
+- [Sequence Diagrams](docs/sequence-diagrams.md)
+- [Tech Stack](docs/tech-stack.md)
+- [Future Scope](docs/future-scope.md)
 
-## 🏗️ System Workflow
-<!-- diagram will be added later -->
+## Local environment
 
-🔗 Detailed docs:  
-- [System Workflow](docs/system-workflow.md)  
-- [Sequence Diagrams](docs/sequence-diagrams.md)  
-- [Tech Stack](docs/tech-stack.md)  
-- [Future Scope](docs/future-scope.md)  
+Copy `.env.example` to `.env` and set the service secrets and database URLs.
 
----
+## Note
 
-## 🛠️ Tech Stack
-
-**Frontend**  
-- React Native (Mobile: Student + Teacher)  
-- React.js (Web Dashboard: HOD + Admin)  
-- TailwindCSS (NativeWind) for styling  
-
-**Backend**  
-- Node.js + Express.js  
-- MongoDB (Atlas)  
-- JWT Authentication  
-- Socket.IO for real-time sync  
-- Google Maps API for Geofencing  
-
-**Core Features**  
-- OTP/QR Code (qrcode + otplib)  
-- Reverse QR Authentication  
-- BLE Beacon Support  
-- Attendance Analytics (Recharts, Mongo Aggregations)  
-
-👉 Detailed breakdown: [Tech Stack Doc](docs/tech-stack.md)
-
----
-
-## 👥 User Roles
-
-| Role     | Platform        | Key Actions |
-|----------|----------------|-------------|
-| Student  | Mobile App      | Request OTP, Scan QR, GPS validation |
-| Teacher  | Mobile App/Web  | Generate OTP, Verify Reverse QR/Beacon |
-| HOD      | Web Dashboard   | View reports, track analytics |
-| Admin    | Web Dashboard   | Manage users, system settings, logs |
-
----
-
-## 🔮 Future Scope
-- AI-powered **proxy detection** via unusual pattern analysis.  
-- **Blockchain ledger** for tamper-proof attendance.  
-- **Biometric layers** (facial recognition, voice authentication).  
-- Integration with **LMS/ERP platforms**.  
-
-👉 Full doc: [Future Scope](docs/future-scope.md)
-
-
-
-
----
-
-## 🏆 Impact
- 
-- **No Proxy Attendance** (multi-factor verification).  
-- **Low-cost deployment** (no hardware needed beyond smartphones).  
-- **Real-time monitoring** for teachers & HODs.  
-- **Scalable adoption** across schools, universities, and corporates.  
-
----
-
-## 📜 License
-MIT License – Free to use and modify.  
-
-
-
----
-
+This is a scaffolded enterprise implementation, not a toy demo. The backend logic and schema are structured for server-side validation, role separation, and future production wiring to real persistence and push providers.
