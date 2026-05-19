@@ -4,9 +4,9 @@ import { router } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import { ActivityIndicator, Pressable, Text, TextInput, View } from 'react-native';
 import { z } from 'zod';
-import * as Device from 'expo-device';
 import { login } from '../../lib/api';
 import { saveSession } from '../../lib/session';
+import * as Device from 'expo-device';
 
 const loginSchema = z.object({
   email: z.string().email(),

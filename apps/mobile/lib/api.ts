@@ -1,6 +1,4 @@
-const apiUrl =
-  (globalThis as typeof globalThis & { process?: { env?: Record<string, string | undefined> } }).process?.env?.
-    EXPO_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1';
+const apiUrl = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1';
 
 type RequestOptions = RequestInit & { token?: string };
 

@@ -41,14 +41,14 @@ export default function LoginPage() {
             className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none"
             placeholder="Email"
             value={email}
-            onChange={(event) => setEmail((event.target as HTMLInputElement).value)}
+            onChange={(event) => setEmail(event.target.value)}
           />
           <input
             className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none"
             placeholder="Password"
             type="password"
             value={password}
-            onChange={(event) => setPassword((event.target as HTMLInputElement).value)}
+            onChange={(event) => setPassword(event.target.value)}
           />
           <button className="w-full rounded-2xl bg-cyan-400 px-4 py-3 text-sm font-semibold text-slate-950" type="submit">
             {loginMutation.isPending ? 'Signing in...' : 'Sign in'}

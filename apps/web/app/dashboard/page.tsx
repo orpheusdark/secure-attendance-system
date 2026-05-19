@@ -10,12 +10,12 @@ type Overview = {
   averageValidationMs: number;
 };
 
-const metrics: Array<{ label: string; key: keyof Overview; suffix?: string }> = [
+const metrics = [
   { label: 'Attendance rate', key: 'attendanceRate', suffix: '%' },
   { label: 'Suspicious scans', key: 'fraudAttempts' },
   { label: 'Validated sessions', key: 'suspiciousSessions' },
   { label: 'Mean check latency', key: 'averageValidationMs', suffix: ' ms' },
-] ;
+] as const;
 
 export default function DashboardPage() {
   const overviewQuery = useQuery({ queryKey: ['overview'], queryFn: () => requestJson<Overview>('/analytics/overview') });

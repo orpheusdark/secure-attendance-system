@@ -135,10 +135,7 @@ export class AttendanceService {
       throw new NotFoundException('Session not found');
     }
 
-    const matchingToken = session.qrTokens.find(
-      (token: { id: string; tokenHash: string; revokedAt: Date | null; consumedAt: Date | null }) =>
-        token.tokenHash === sha256Hex(scan.token) && token.revokedAt === null && token.consumedAt === null,
-    );
+    const matchingToken = session.qrTokens.find((token) => token.tokenHash === sha256Hex(scan.token) && token.revokedAt === null && token.consumedAt === null);
     const token = validateRollingAttendanceToken(scan.token, process.env.SESSION_TOKEN_SECRET ?? 'session-secret');
     const freshnessSeconds = token ? Math.max(0, Math.floor((Date.now() - token.issuedAt) / 1000)) : Number.POSITIVE_INFINITY;
     const assessment = assessFraud({
