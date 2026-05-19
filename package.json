@@ -9,6 +9,8 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
+    "infra:up": "docker compose -f infra/docker-compose.yml up -d",
+    "api:seed": "pnpm --filter @secure-attendance/api run prisma:seed",
     "format": "prettier --write ."
   },
   "devDependencies": {
