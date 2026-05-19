@@ -64,19 +64,19 @@ enum SessionEventType {
 }
 
 model Institution {
-  id                   String               @id @default(cuid())
-  name                 String
-  code                 String               @unique
-  timezone             String               @default("UTC")
-  geofenceRadiusMeters Int                  @default(150)
-  isActive             Boolean              @default(true)
-  createdAt            DateTime             @default(now())
-  updatedAt            DateTime             @updatedAt
-  departments          Department[]
-  users                User[]
-  classrooms           Classroom[]
-  subjects             Subject[]
-  attendanceSessions   AttendanceSession[]
+  id                    String          @id @default(cuid())
+  name                  String
+  code                  String          @unique
+  timezone              String          @default("UTC")
+  geofenceRadiusMeters  Int             @default(150)
+  isActive              Boolean         @default(true)
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+  departments           Department[]
+  users                 User[]
+  classrooms            Classroom[]
+  subjects              Subject[]
+  attendanceSessions    AttendanceSession[]
 }
 
 model Department {
@@ -94,18 +94,18 @@ model Department {
 }
 
 model User {
-  id              String       @id @default(cuid())
+  id              String      @id @default(cuid())
   institutionId   String?
   departmentId    String?
   name            String
-  email           String       @unique
-  phone           String?      @unique
+  email           String      @unique
+  phone           String?     @unique
   passwordHash    String?
   role            UserRole
-  deviceTrust     DeviceTrust  @default(new)
-  isActive        Boolean      @default(true)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  deviceTrust     DeviceTrust @default(new)
+  isActive        Boolean     @default(true)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
   institution     Institution? @relation(fields: [institutionId], references: [id], onDelete: SetNull)
   department      Department?  @relation(fields: [departmentId], references: [id], onDelete: SetNull)
   deviceRegistry  DeviceRegistry[]
@@ -133,22 +133,22 @@ model Subject {
 }
 
 model Classroom {
-  id             String      @id @default(cuid())
-  institutionId  String
-  name           String
-  building       String
-  floor          String?
-  latitude       Float
-  longitude      Float
-  accuracyMeters Int         @default(25)
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-  institution    Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
-  sessions       AttendanceSession[]
+  id            String      @id @default(cuid())
+  institutionId String
+  name          String
+  building      String
+  floor         String?
+  latitude      Float
+  longitude     Float
+  accuracyMeters Int        @default(25)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  sessions      AttendanceSession[]
 }
 
 model AttendanceSession {
-  id               String            @id @default(cuid())
+  id              String            @id @default(cuid())
   institutionId    String
   subjectId        String
   classroomId      String
@@ -156,7 +156,7 @@ model AttendanceSession {
   startsAt         DateTime
   endsAt           DateTime
   radiusMeters     Int
-  verificationMode VerificationMode   @default(qr_plus_location)
+  verificationMode VerificationMode  @default(qr_plus_location)
   isLocked         Boolean           @default(false)
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
@@ -172,54 +172,54 @@ model AttendanceSession {
 }
 
 model AttendanceRecord {
-  id              String            @id @default(cuid())
-  sessionId       String
-  userId          String?
-  status          AttendanceStatus  @default(manual_review)
-  fraudScore      Int               @default(0)
-  reasons         Json?
-  distanceMeters  Float?
-  deviceId        String?
-  ipAddress       String?
-  accuracyMeters  Float?
-  selfieConfidence Float?
-  motionScore     Float?
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  session         AttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  user            User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  id                 String           @id @default(cuid())
+  sessionId           String
+  userId              String?
+  status              AttendanceStatus @default(manual_review)
+  fraudScore          Int              @default(0)
+  reasons             Json?
+  distanceMeters      Float?
+  deviceId            String?
+  ipAddress           String?
+  accuracyMeters      Float?
+  selfieConfidence    Float?
+  motionScore         Float?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  session             AttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user                User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([sessionId, status])
 }
 
 model QrToken {
-  id         String            @id @default(cuid())
-  sessionId   String
-  tokenHash   String            @unique
-  nonce       String
-  issuedAt    DateTime          @default(now())
-  expiresAt   DateTime
-  consumedAt  DateTime?
-  revokedAt   DateTime?
-  isOffline   Boolean           @default(false)
-  session     AttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  id            String            @id @default(cuid())
+  sessionId     String
+  tokenHash     String            @unique
+  nonce         String
+  issuedAt      DateTime          @default(now())
+  expiresAt     DateTime
+  consumedAt    DateTime?
+  revokedAt     DateTime?
+  isOffline     Boolean           @default(false)
+  session       AttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
   @@index([sessionId, expiresAt])
 }
 
 model DeviceRegistry {
-  id           String   @id @default(cuid())
-  userId       String
-  deviceId     String
-  deviceName   String?
-  platform     String?
-  trustScore   Float    @default(0.5)
-  lastIpAddress String?
-  lastSeenAt   DateTime @default(now())
-  isBlocked    Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id            String     @id @default(cuid())
+  userId        String
+  deviceId      String
+  deviceName    String?
+  platform      String?
+  trustScore     Float      @default(0.5)
+  lastIpAddress  String?
+  lastSeenAt     DateTime   @default(now())
+  isBlocked      Boolean    @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, deviceId])
 }
@@ -244,7 +244,7 @@ model Notification {
   payload       Json?
   readAt        DateTime?
   createdAt     DateTime         @default(now())
-  user          User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, type])
 }
@@ -287,29 +287,29 @@ model AnalyticsCache {
 }
 
 model SessionEvent {
-  id            String            @id @default(cuid())
+  id            String           @id @default(cuid())
   sessionId     String
   type          SessionEventType
   payload       Json?
-  createdAt     DateTime          @default(now())
+  createdAt     DateTime         @default(now())
   session       AttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
   @@index([sessionId, type])
 }
 
 model AuthSession {
-  id               String   @id @default(cuid())
-  userId           String
-  deviceId         String
-  accessTokenHash  String
-  refreshTokenHash String   @unique
-  ipAddress        String?
-  userAgent        String?
-  expiresAt        DateTime
-  revokedAt        DateTime?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String   @id @default(cuid())
+  userId            String
+  deviceId          String
+  accessTokenHash   String
+  refreshTokenHash  String   @unique
+  ipAddress         String?
+  userAgent         String?
+  expiresAt         DateTime
+  revokedAt         DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, deviceId])
   @@index([expiresAt])

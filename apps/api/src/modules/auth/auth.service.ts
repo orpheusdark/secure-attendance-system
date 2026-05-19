@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { compare } from 'bcryptjs';
+import { compare, hash } from 'bcryptjs';
 import { createRollingAttendanceToken, sha256Hex } from '@secure-attendance/security';
 import type { LoginMethod, UserProfile } from '@secure-attendance/contracts';
 import { PrismaService } from '../../prisma/prisma.service';
