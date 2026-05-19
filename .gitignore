@@ -1,0 +1,9 @@
+node_modules
+.dist
+.next
+.expo
+coverage
+.env
+.env.*
+.DS_Store
+pnpm-lock.yaml

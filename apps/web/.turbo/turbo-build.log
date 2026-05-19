@@ -1,0 +1,49 @@
+
+> @secure-attendance/web@1.0.0 build C:\Users\niran\secure-attendance-system\apps\web
+> next build
+
+ ⚠ `experimental.typedRoutes` has been moved to `typedRoutes`. Please update your next.config.mjs file accordingly.
+   ▲ Next.js 15.5.18
+   - Experiments (use with caution):
+     ✓ typedRoutes
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 10.6s
+   Linting and checking validity of types ...
+
+   We detected TypeScript in your project and reconfigured your tsconfig.json file for you. Strict-mode is set to false by default.
+   The following suggested values were added to your tsconfig.json. These values can be changed to fit your project's needs:
+
+   	- allowJs was set to true
+   	- noEmit was set to true
+   	- incremental was set to true
+
+   The following mandatory changes were made to your tsconfig.json:
+
+   	- isolatedModules was set to true (requirement for SWC / Babel)
+
+   Collecting page data ...
+   Generating static pages (0/9) ...
+   Generating static pages (2/9) 
+   Generating static pages (4/9) 
+   Generating static pages (6/9) 
+ ✓ Generating static pages (9/9)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                      130 B         102 kB
+├ ○ /_not-found                            991 B         103 kB
+├ ○ /dashboard                           1.35 kB         112 kB
+├ ○ /dashboard/admin                       681 B         112 kB
+├ ○ /dashboard/student                     130 B         102 kB
+├ ○ /dashboard/teacher                     689 B         112 kB
+└ ○ /login                               2.82 kB         108 kB
++ First Load JS shared by all             102 kB
+  ├ chunks/798-ed19014055a40706.js       46.1 kB
+  ├ chunks/bb811a4c-1a6a58e3dcbf1b3b.js  54.2 kB
+  └ other shared chunks (total)          1.97 kB
+
+
+○  (Static)  prerendered as static content
+
