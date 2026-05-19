@@ -8,6 +8,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: secure_attendance
+          POSTGRES_USER: secure_attendance
+          POSTGRES_PASSWORD: secure_attendance
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready --health-interval=10s --health-timeout=5s --health-retries=5
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -18,4 +29,24 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile=false
-      - run: pnpm typecheck
+      - name: Wait for Postgres
+        run: |
+          echo "Waiting for Postgres..."
+          for i in {1..20}; do
+            pg_isready -h localhost -p 5432 && exit 0 || sleep 2
+          done
+          exit 1
+      - name: Apply migrations
+        env:
+          DATABASE_URL: postgres://secure_attendance:secure_attendance@localhost:5432/secure_attendance
+        run: pnpm --filter @secure-attendance/api run prisma:deploy
+      - name: Seed DB
+        env:
+          DATABASE_URL: postgres://secure_attendance:secure_attendance@localhost:5432/secure_attendance
+        run: pnpm --filter @secure-attendance/api run prisma:seed
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Run API tests
+        env:
+          DATABASE_URL: postgres://secure_attendance:secure_attendance@localhost:5432/secure_attendance
+        run: pnpm --filter @secure-attendance/api test
