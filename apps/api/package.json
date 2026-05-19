@@ -10,7 +10,8 @@
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "prisma:generate": "prisma generate",
-    "prisma:seed": "tsx prisma/seed.ts"
+    "prisma:seed": "tsx prisma/seed.ts",
+    "prisma:push": "prisma db push --accept-data-loss"
   },
   "dependencies": {
     "@nestjs/common": "^10.4.5",
@@ -47,6 +48,7 @@
     "jest-environment-node": "^29.7.0",
     "prisma": "^5.22.0",
     "ts-jest": "^29.4.9",
+    "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   }
