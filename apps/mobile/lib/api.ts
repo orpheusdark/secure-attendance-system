@@ -1,4 +1,5 @@
 import { Platform } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
 function resolveApiUrl() {
   const rawUrl =
@@ -34,7 +35,7 @@ async function requestJson<T>(path: string, options: RequestOptions = {}): Promi
         ...(options.headers ?? {}),
       },
     });
-  } catch {
+  } catch (err) {
     throw new Error(
       `Unable to reach the API at ${apiUrl}. If you're using Expo Go on a phone, set EXPO_PUBLIC_API_URL to your computer's LAN IP (for example http://192.168.1.10:4000/api/v1) and restart Expo.`,
     );
@@ -49,13 +50,16 @@ async function requestJson<T>(path: string, options: RequestOptions = {}): Promi
 }
 
 export async function login(email: string, password: string, deviceId: string) {
-  return requestJson<{ accessToken: string; refreshToken: string; user: { id: string; role: string; name: string; email: string } }>(
+  const result = await requestJson<{ accessToken: string; refreshToken: string; user: { id: string; role: string; name: string; email: string } }>(
     '/auth/login',
     {
       method: 'POST',
       body: JSON.stringify({ email, password, method: 'password', deviceId }),
     },
   );
+  // Persist the working API URL
+  await SecureStore.setItemAsync('api_url', apiUrl);
+  return result;
 }
 
 export async function getAnalyticsOverview() {
