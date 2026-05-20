@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View, Pressable } from 'react-native';
 import { router } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { GlassCard, PrimaryButton, Screen, StatusPill } from '../../components/experience';
 
 export default function HealthCheckScreen() {
   const [status, setStatus] = useState<'checking' | 'healthy' | 'error'>('checking');
@@ -26,18 +27,17 @@ export default function HealthCheckScreen() {
         if (response.ok) {
           setStatus('healthy');
           setMessage('API is reachable. Proceeding to login...');
-          // @ts-ignore - Route exists but TypeScript doesn't recognize dynamic routes
-          setTimeout(() => router.replace('/(auth)/login'), 2000);
+          setTimeout(() => router.replace('/(auth)/login' as never), 1200);
         } else {
           setStatus('error');
           setMessage(`API returned status ${response.status}. Please try again.`);
         }
-      } catch (error) {
+      } catch {
         setStatus('error');
         const apiUrl =
           (globalThis as typeof globalThis & { process?: { env?: Record<string, string | undefined> } }).process?.env?.['EXPO_PUBLIC_API_URL'] ??
           'http://localhost:4000/api/v1';
-        setMessage(`Cannot reach API at ${apiUrl}. Check your connection or API URL in Settings.`);
+        setMessage(`Cannot reach API at ${apiUrl}. Check your network or API URL.`);
       }
     };
 
@@ -45,45 +45,32 @@ export default function HealthCheckScreen() {
   }, []);
 
   return (
-    <View className="flex-1 items-center justify-center bg-slate-950 px-6">
-      {status === 'checking' && (
-        <>
-          <ActivityIndicator size="large" color="#22d3ee" />
-          <Text className="mt-6 text-center text-lg font-semibold text-white">{message}</Text>
-        </>
-      )}
-
-      {status === 'healthy' && (
-        <>
-          <View className="mb-6 h-24 w-24 items-center justify-center rounded-3xl bg-emerald-400/15 border border-emerald-300/20">
-            <Text className="text-4xl">✓</Text>
+    <Screen>
+      <View className="flex-1 justify-center">
+        <GlassCard className="space-y-6">
+          <View className="items-center gap-4">
+            <StatusPill tone={status === 'healthy' ? 'emerald' : status === 'error' ? 'rose' : 'sky'} label={status === 'checking' ? 'Checking' : status === 'healthy' ? 'Connected' : 'Attention'} />
+            <Text className="text-center text-3xl font-bold text-white">System health check</Text>
+            <Text className="text-center text-sm leading-6 text-slate-300">We validate API reachability before entering the trust layer.</Text>
           </View>
-          <Text className="text-center text-lg font-semibold text-emerald-300">{message}</Text>
-        </>
-      )}
 
-      {status === 'error' && (
-        <>
-          <View className="mb-6 h-24 w-24 items-center justify-center rounded-3xl bg-rose-400/15 border border-rose-300/20">
-            <Text className="text-4xl">⚠</Text>
+          <View className="items-center gap-5">
+            {status === 'checking' ? <ActivityIndicator size="large" color="#38bdf8" /> : null}
+            {status === 'healthy' ? <Text className="text-5xl">✓</Text> : null}
+            {status === 'error' ? <Text className="text-5xl">⚠</Text> : null}
+            <Text className={`text-center text-base ${status === 'healthy' ? 'text-emerald-300' : status === 'error' ? 'text-rose-200' : 'text-slate-200'}`}>{message}</Text>
           </View>
-          <Text className="mt-4 text-center text-lg font-semibold text-white">Connection Error</Text>
-          <Text className="mt-3 text-center text-slate-400">{message}</Text>
-          <Pressable
-            className="mt-8 rounded-2xl bg-cyan-400 px-8 py-4"
-            // @ts-ignore - Route exists but TypeScript doesn't recognize dynamic routes
-            onPress={() => router.replace('/(auth)/health')}
-          >
-            <Text className="text-center font-semibold text-slate-950">Retry</Text>
-          </Pressable>
-          <Pressable className="mt-4 rounded-2xl px-8 py-4" onPress={() => {
-            // @ts-ignore - Route exists but TypeScript doesn't recognize dynamic routes
-            router.replace('/(auth)/login')
-          }}>
-            <Text className="text-center font-semibold text-cyan-300">Skip Check</Text>
-          </Pressable>
-        </>
-      )}
-    </View>
+
+          {status === 'error' ? (
+            <View className="space-y-3">
+              <PrimaryButton title="Retry health check" onPress={() => router.replace('/(auth)/health' as never)} tone="sky" />
+              <Pressable onPress={() => router.replace('/(auth)/login' as never)}>
+                <Text className="text-center text-sm text-cyan-300">Skip to login</Text>
+              </Pressable>
+            </View>
+          ) : null}
+        </GlassCard>
+      </View>
+    </Screen>
   );
 }

@@ -1,7 +1,9 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
+import { Settings2, ShieldAlert } from 'lucide-react';
 import { requestJson } from '../../../lib/api';
+import { MetricCard, SectionCard, StatusPill } from '../../../components/console-ui';
 
 type Overview = {
   attendanceRate: number;
@@ -14,51 +16,40 @@ export default function AdminDashboardPage() {
   const overviewQuery = useQuery({ queryKey: ['admin-overview'], queryFn: () => requestJson<Overview>('/analytics/overview') });
 
   const managementActions = [
-    { title: 'Audit Logs', description: 'Review all system events and access records', icon: '📋' },
-    { title: 'User Management', description: 'Create, modify, or suspend user accounts', icon: '👥' },
-    { title: 'Fraud Rules', description: 'Configure fraud detection thresholds', icon: '⚙️' },
-    { title: 'Reports', description: 'Generate institution-wide compliance reports', icon: '📊' },
+    { title: 'Audit logs', description: 'Review every system event and access record.', tone: 'cyan' as const },
+    { title: 'User management', description: 'Create, modify, or suspend user accounts.', tone: 'emerald' as const },
+    { title: 'Fraud rules', description: 'Adjust detection thresholds and escalation behavior.', tone: 'amber' as const },
+    { title: 'Reports', description: 'Generate signed compliance reports for leadership.', tone: 'rose' as const },
   ];
 
   return (
-    <main className="space-y-6">
-      <section className="rounded-[32px] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
-        <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">Platform administration</p>
-        <h1 className="mt-3 text-4xl font-semibold text-white">Institution operations</h1>
-        <p className="mt-3 max-w-3xl text-slate-400">
-          Manage users, configure fraud detection, review audit logs, and generate compliance reports for your institution.
+    <main className="space-y-8">
+      <SectionCard title="Institution operations" eyebrow="Platform administration" action={<Settings2 className="h-4 w-4" />}>
+        <p className="max-w-3xl text-sm leading-7 text-slate-300">
+          Centralize users, policies, audit logs, fraud rules, and compliance reporting in a visual system designed for operational trust.
         </p>
-      </section>
+      </SectionCard>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-[28px] border border-white/10 bg-slate-950/60 p-6">
-          <p className="text-sm text-slate-400">Platform attendance</p>
-          <p className="mt-3 text-3xl font-semibold text-white">{overviewQuery.data?.attendanceRate ?? '—'}%</p>
-        </div>
-        <div className="rounded-[28px] border border-white/10 bg-slate-950/60 p-6">
-          <p className="text-sm text-slate-400">Total fraud alerts</p>
-          <p className="mt-3 text-3xl font-semibold text-white">{overviewQuery.data?.fraudAttempts ?? '—'}</p>
-        </div>
-        <div className="rounded-[28px] border border-white/10 bg-slate-950/60 p-6">
-          <p className="text-sm text-slate-400">Sessions monitored</p>
-          <p className="mt-3 text-3xl font-semibold text-white">{overviewQuery.data?.suspiciousSessions ?? '—'}</p>
-        </div>
-        <div className="rounded-[28px] border border-white/10 bg-slate-950/60 p-6">
-          <p className="text-sm text-slate-400">Avg response time</p>
-          <p className="mt-3 text-3xl font-semibold text-white">{overviewQuery.data?.averageValidationMs ?? '—'} ms</p>
-        </div>
+        <MetricCard label="Platform attendance" value={`${overviewQuery.data?.attendanceRate ?? '—'}%`} delta="System-wide validity" tone="emerald" />
+        <MetricCard label="Total fraud alerts" value={String(overviewQuery.data?.fraudAttempts ?? '—')} delta="Threat radar output" tone="rose" />
+        <MetricCard label="Sessions monitored" value={String(overviewQuery.data?.suspiciousSessions ?? '—')} delta="Live boards online" tone="cyan" />
+        <MetricCard label="Avg response time" value={`${overviewQuery.data?.averageValidationMs ?? '—'} ms`} delta="Operations SLA" tone="amber" />
       </section>
 
       <section className="grid gap-4 md:grid-cols-2">
         {managementActions.map((action) => (
-          <div key={action.title} className="rounded-[28px] border border-white/10 bg-white/5 p-6 hover:bg-white/10 transition-colors cursor-pointer">
-            <p className="text-3xl">{action.icon}</p>
-            <h3 className="mt-2 font-semibold text-white">{action.title}</h3>
-            <p className="mt-1 text-sm text-slate-400">{action.description}</p>
-          </div>
+          <SectionCard key={action.title} title={action.title} eyebrow="Admin control" action={<StatusPill tone={action.tone}>{action.title}</StatusPill>}>
+            <p className="text-sm leading-7 text-slate-400">{action.description}</p>
+          </SectionCard>
         ))}
       </section>
+
+      <SectionCard title="Compliance shield" eyebrow="Institution safeguards" action={<ShieldAlert className="h-4 w-4" />}>
+        <p className="max-w-3xl text-sm leading-7 text-slate-400">
+          Every action is logged, every role change is auditable, and fraud policy adjustments remain traceable across the institution.
+        </p>
+      </SectionCard>
     </main>
   );
 }
-
