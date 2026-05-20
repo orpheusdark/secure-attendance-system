@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Secure Attendance",
+    "slug": "secure-attendance",
+    "scheme": "secure-attendance",
+    "userInterfaceStyle": "automatic",
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

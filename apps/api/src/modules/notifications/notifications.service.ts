@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { NotificationType } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
 export type NotificationEntry = {
   id: string;
   userId: string;
-  type: string;
+  type: NotificationType;
   title: string;
   message: string;
   createdAt: string;
@@ -14,7 +15,7 @@ export type NotificationEntry = {
 export class NotificationsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(body: { userId: string; type: string; title: string; message: string }) {
+  async create(body: { userId: string; type: NotificationType; title: string; message: string }) {
     const notification = await this.prisma.notification.create({
       data: {
         userId: body.userId,

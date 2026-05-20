@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { NotificationType } from '@prisma/client';
 import { NotificationsService } from './notifications.service';
 
 @Controller('notifications')
@@ -11,7 +12,7 @@ export class NotificationsController {
   }
 
   @Post()
-  create(@Body() body: { userId: string; type: string; title: string; message: string }) {
+  create(@Body() body: { userId: string; type: NotificationType; title: string; message: string }) {
     return this.notificationsService.create(body);
   }
 }

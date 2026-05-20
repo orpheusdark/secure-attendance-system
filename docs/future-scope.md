@@ -79,3 +79,19 @@
   Run geofence + beacon checks on **mobile edge devices** to reduce server load.  
 
 ---
+
+## 7️⃣ Near-Term Product Work
+
+- **Auto-Detect Mobile API Host**  
+  Save the last working API host per platform so Expo Go and emulators connect without manual edits.
+
+- **Startup Health Checks**  
+  Add a visible API/database status check before login to catch network issues earlier.
+
+- **End-to-End Smoke Tests**  
+  Script a quick login flow that confirms API, web, and mobile still work after changes.
+
+- **Setup Docs Refresh**  
+  Document the exact local start commands, demo credentials, and platform-specific Expo URL values.
+
+---

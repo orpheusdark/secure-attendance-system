@@ -36,14 +36,14 @@ export class AttendanceService {
   async createSession(body: Record<string, unknown>) {
     const parsed = attendanceSessionSchema.parse({
       id: randomUUID(),
-      institutionId: String(body.institutionId ?? 'institution-default'),
-      subjectId: String(body.subjectId ?? 'subject-default'),
-      classroomId: String(body.classroomId ?? 'classroom-default'),
-      teacherId: String(body.teacherId ?? 'teacher-default'),
-      startsAt: String(body.startsAt ?? new Date().toISOString()),
-      endsAt: String(body.endsAt ?? new Date(Date.now() + 60 * 60 * 1000).toISOString()),
-      radiusMeters: Number(body.radiusMeters ?? 150),
-      verificationMode: body.verificationMode ?? 'qr_plus_location',
+      institutionId: String(body['institutionId'] ?? 'institution-default'),
+      subjectId: String(body['subjectId'] ?? 'subject-default'),
+      classroomId: String(body['classroomId'] ?? 'classroom-default'),
+      teacherId: String(body['teacherId'] ?? 'teacher-default'),
+      startsAt: String(body['startsAt'] ?? new Date().toISOString()),
+      endsAt: String(body['endsAt'] ?? new Date(Date.now() + 60 * 60 * 1000).toISOString()),
+      radiusMeters: Number(body['radiusMeters'] ?? 150),
+      verificationMode: body['verificationMode'] ?? 'qr_plus_location',
       isLocked: false,
     });
 
@@ -51,21 +51,21 @@ export class AttendanceService {
       where: { id: parsed.classroomId },
       update: {
         institutionId: parsed.institutionId,
-        name: String(body.classroomName ?? 'Session Classroom'),
-        building: String(body.building ?? 'Main Building'),
-        latitude: Number(body.latitude ?? 0),
-        longitude: Number(body.longitude ?? 0),
-        accuracyMeters: Number(body.accuracyMeters ?? 25),
+        name: String(body['classroomName'] ?? 'Session Classroom'),
+        building: String(body['building'] ?? 'Main Building'),
+        latitude: Number(body['latitude'] ?? 0),
+        longitude: Number(body['longitude'] ?? 0),
+        accuracyMeters: Number(body['accuracyMeters'] ?? 25),
       },
       create: {
         id: parsed.classroomId,
         institutionId: parsed.institutionId,
-        name: String(body.classroomName ?? 'Session Classroom'),
-        building: String(body.building ?? 'Main Building'),
-        floor: body.floor ? String(body.floor) : null,
-        latitude: Number(body.latitude ?? 0),
-        longitude: Number(body.longitude ?? 0),
-        accuracyMeters: Number(body.accuracyMeters ?? 25),
+        name: String(body['classroomName'] ?? 'Session Classroom'),
+        building: String(body['building'] ?? 'Main Building'),
+        floor: body['floor'] ? String(body['floor']) : null,
+        latitude: Number(body['latitude'] ?? 0),
+        longitude: Number(body['longitude'] ?? 0),
+        accuracyMeters: Number(body['accuracyMeters'] ?? 25),
       },
     });
 
@@ -90,7 +90,7 @@ export class AttendanceService {
       radiusMeters: session.radiusMeters,
       verificationMode: session.verificationMode,
       isLocked: session.isLocked,
-      rollingSecret: process.env.SESSION_TOKEN_SECRET ?? 'session-secret',
+      rollingSecret: process.env['SESSION_TOKEN_SECRET'] ?? 'session-secret',
       createdAt: new Date().toISOString(),
       qrRefreshSeconds: 12,
       classroomLocation: {
@@ -136,7 +136,7 @@ export class AttendanceService {
     }
 
     const matchingToken = session.qrTokens.find((token) => token.tokenHash === sha256Hex(scan.token) && token.revokedAt === null && token.consumedAt === null);
-    const token = validateRollingAttendanceToken(scan.token, process.env.SESSION_TOKEN_SECRET ?? 'session-secret');
+    const token = validateRollingAttendanceToken(scan.token, process.env['SESSION_TOKEN_SECRET'] ?? 'session-secret');
     const freshnessSeconds = token ? Math.max(0, Math.floor((Date.now() - token.issuedAt) / 1000)) : Number.POSITIVE_INFINITY;
     const assessment = assessFraud({
       expectedLocation: { latitude: session.classroom.latitude, longitude: session.classroom.longitude },

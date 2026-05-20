@@ -39,7 +39,7 @@ jobs:
       - name: Apply migrations
         env:
           DATABASE_URL: postgres://secure_attendance:secure_attendance@localhost:5432/secure_attendance
-        run: pnpm --filter @secure-attendance/api run prisma:deploy
+        run: pnpm --filter @secure-attendance/api run prisma:migrate:deploy
       - name: Seed DB
         env:
           DATABASE_URL: postgres://secure_attendance:secure_attendance@localhost:5432/secure_attendance
@@ -50,3 +50,4 @@ jobs:
         env:
           DATABASE_URL: postgres://secure_attendance:secure_attendance@localhost:5432/secure_attendance
         run: pnpm --filter @secure-attendance/api test
+      - run: pnpm build

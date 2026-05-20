@@ -1,6 +1,8 @@
+import { hash } from 'bcryptjs';
 import { PrismaClient, UserRole, VerificationMode } from '@prisma/client';
 
 const prisma = new PrismaClient();
+const demoPassword = 'Password123!';
 
 async function main() {
   const institution = await prisma.institution.upsert({
@@ -31,28 +33,34 @@ async function main() {
 
   const teacher = await prisma.user.upsert({
     where: { email: 'teacher@nexus.edu' },
-    update: {},
+    update: {
+      passwordHash: await hash(demoPassword, 10),
+      deviceTrust: 'trusted',
+    },
     create: {
       institutionId: institution.id,
       departmentId: department.id,
       name: 'Dr. Ada Mentor',
       email: 'teacher@nexus.edu',
       role: UserRole.teacher,
-      passwordHash: 'seeded-hash',
+      passwordHash: await hash(demoPassword, 10),
       deviceTrust: 'trusted',
     },
   });
 
   const student = await prisma.user.upsert({
     where: { email: 'student@nexus.edu' },
-    update: {},
+    update: {
+      passwordHash: await hash(demoPassword, 10),
+      deviceTrust: 'trusted',
+    },
     create: {
       institutionId: institution.id,
       departmentId: department.id,
       name: 'Jordan Student',
       email: 'student@nexus.edu',
       role: UserRole.student,
-      passwordHash: 'seeded-hash',
+      passwordHash: await hash(demoPassword, 10),
       deviceTrust: 'trusted',
     },
   });
@@ -98,8 +106,20 @@ async function main() {
     },
   });
 
-  await prisma.deviceRegistry.create({
-    data: {
+  await prisma.deviceRegistry.upsert({
+    where: {
+      userId_deviceId: {
+        userId: student.id,
+        deviceId: 'seed-device-001',
+      },
+    },
+    update: {
+      deviceName: 'Student iPhone',
+      platform: 'ios',
+      trustScore: 0.92,
+      lastIpAddress: '127.0.0.1',
+    },
+    create: {
       userId: student.id,
       deviceId: 'seed-device-001',
       deviceName: 'Student iPhone',
@@ -129,7 +149,13 @@ async function main() {
     },
   });
 
-  console.log({ institution: institution.code, teacher: teacher.email, student: student.email, session: session.id });
+  console.log({
+    institution: institution.code,
+    teacher: teacher.email,
+    student: student.email,
+    password: demoPassword,
+    session: session.id,
+  });
 }
 
 main()

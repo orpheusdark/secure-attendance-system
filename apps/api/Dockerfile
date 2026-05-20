@@ -7,6 +7,6 @@ COPY packages/security/package.json packages/security/package.json
 COPY packages/ui/package.json packages/ui/package.json
 RUN corepack enable && pnpm install --frozen-lockfile=false
 COPY . .
+RUN pnpm --filter @secure-attendance/api prisma:generate && pnpm --filter @secure-attendance/contracts build && pnpm --filter @secure-attendance/security build && pnpm --filter @secure-attendance/api build
 WORKDIR /app/apps/api
-RUN pnpm build
-CMD ["pnpm", "start"]
+CMD ["sh", "-c", "pnpm prisma:migrate:deploy && pnpm start"]

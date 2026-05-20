@@ -48,14 +48,14 @@ export class AuthService {
 
     const accessToken = createRollingAttendanceToken({
       sessionId: user.id,
-      secret: process.env.TOKEN_SECRET ?? 'dev-secret',
+      secret: process.env['TOKEN_SECRET'] ?? 'dev-secret',
       ttlSeconds: 900,
       deviceId: input.deviceId,
     });
 
     const refreshToken = createRollingAttendanceToken({
       sessionId: user.id,
-      secret: process.env.REFRESH_SECRET ?? 'refresh-secret',
+      secret: process.env['REFRESH_SECRET'] ?? 'refresh-secret',
       ttlSeconds: 60 * 60 * 24 * 30,
       deviceId: input.deviceId,
     });
@@ -119,14 +119,14 @@ export class AuthService {
 
     const accessToken = createRollingAttendanceToken({
       sessionId: session.user.id,
-      secret: process.env.TOKEN_SECRET ?? 'dev-secret',
+      secret: process.env['TOKEN_SECRET'] ?? 'dev-secret',
       ttlSeconds: 900,
       deviceId,
     });
 
     const nextRefreshToken = createRollingAttendanceToken({
       sessionId: session.user.id,
-      secret: process.env.REFRESH_SECRET ?? 'refresh-secret',
+      secret: process.env['REFRESH_SECRET'] ?? 'refresh-secret',
       ttlSeconds: 60 * 60 * 24 * 30,
       deviceId,
     });
