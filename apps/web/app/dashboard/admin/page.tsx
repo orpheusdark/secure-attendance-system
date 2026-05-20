@@ -60,4 +60,5 @@ export default function AdminDashboardPage() {
       </section>
     </main>
   );
+}
 

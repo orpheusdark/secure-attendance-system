@@ -8,20 +8,8 @@
      ✓ typedRoutes
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 10.6s
+ ✓ Compiled successfully in 2.3s
    Linting and checking validity of types ...
-
-   We detected TypeScript in your project and reconfigured your tsconfig.json file for you. Strict-mode is set to false by default.
-   The following suggested values were added to your tsconfig.json. These values can be changed to fit your project's needs:
-
-   	- allowJs was set to true
-   	- noEmit was set to true
-   	- incremental was set to true
-
-   The following mandatory changes were made to your tsconfig.json:
-
-   	- isolatedModules was set to true (requirement for SWC / Babel)
-
    Collecting page data ...
    Generating static pages (0/9) ...
    Generating static pages (2/9) 
@@ -32,17 +20,17 @@
    Collecting build traces ...
 
 Route (app)                                 Size  First Load JS
-┌ ○ /                                      130 B         102 kB
+┌ ○ /                                      123 B         102 kB
 ├ ○ /_not-found                            991 B         103 kB
-├ ○ /dashboard                           1.35 kB         112 kB
-├ ○ /dashboard/admin                       681 B         112 kB
-├ ○ /dashboard/student                     130 B         102 kB
-├ ○ /dashboard/teacher                     689 B         112 kB
-└ ○ /login                               2.82 kB         108 kB
+├ ○ /dashboard                           1.38 kB         113 kB
+├ ○ /dashboard/admin                     1.32 kB         112 kB
+├ ○ /dashboard/student                   1.13 kB         112 kB
+├ ○ /dashboard/teacher                   1.29 kB         112 kB
+└ ○ /login                               2.89 kB         108 kB
 + First Load JS shared by all             102 kB
   ├ chunks/798-ed19014055a40706.js       46.1 kB
   ├ chunks/bb811a4c-1a6a58e3dcbf1b3b.js  54.2 kB
-  └ other shared chunks (total)          1.97 kB
+  └ other shared chunks (total)          1.99 kB
 
 
 ○  (Static)  prerendered as static content

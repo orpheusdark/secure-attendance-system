@@ -4,10 +4,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const navItems = [
-  { label: 'Overview', href: '/dashboard' },
-  { label: 'Teacher', href: '/dashboard/teacher' },
-  { label: 'Student', href: '/dashboard/student' },
-  { label: 'Admin', href: '/dashboard/admin' },
+  { label: 'Overview', href: '/dashboard' as const },
+  { label: 'Teacher', href: '/dashboard/teacher' as const },
+  { label: 'Student', href: '/dashboard/student' as const },
+  { label: 'Admin', href: '/dashboard/admin' as const },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -37,4 +37,5 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
     </div>
   );
+}
 

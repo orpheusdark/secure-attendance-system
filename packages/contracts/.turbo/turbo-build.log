@@ -1,0 +1,4 @@
+
+> @secure-attendance/contracts@1.0.0 build C:\Users\niran\secure-attendance-system\packages\contracts
+> tsc -p tsconfig.build.json
+
