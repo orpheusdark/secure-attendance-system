@@ -1,4 +1,5 @@
 import { Platform } from 'react-native';
+import Constants from 'expo-constants';
 import * as SecureStore from 'expo-secure-store';
 
 export function resolveApiUrl() {
@@ -11,6 +12,17 @@ export function resolveApiUrl() {
 
     if (Platform.OS === 'android' && (url.hostname === 'localhost' || url.hostname === '127.0.0.1')) {
       url.hostname = '10.0.2.2';
+    }
+
+    if ((url.hostname === 'localhost' || url.hostname === '127.0.0.1') && Platform.OS !== 'web') {
+      const hostUri = Constants.expoConfig?.hostUri ?? Constants.expoGoConfig?.debuggerHost ?? Constants.expoGoConfig?.hostUri;
+
+      if (hostUri) {
+        const host = hostUri.split(':')[0];
+        if (host && host !== 'localhost' && host !== '127.0.0.1') {
+          url.hostname = host;
+        }
+      }
     }
 
     return url.toString().replace(/\/$/, '');
