@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
+import { theme } from '@secure-attendance/ui';
 import { getAnalyticsOverview } from '../../lib/api';
 import { GlassCard, MetricTile, NativeSection, PrimaryButton, PremiumTitle, PulseRing, Screen, StatusPill } from '../../components/experience';
 
@@ -19,8 +20,8 @@ export default function DashboardScreen() {
 
   return (
     <Screen>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerClassName="pb-8">
-        <View className="space-y-6">
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
+        <View style={{ gap: 24 }}>
           <PremiumTitle
             eyebrow="Home"
             title="Your attendance, live."
@@ -29,7 +30,7 @@ export default function DashboardScreen() {
 
           <PulseRing label="attendance" value={`${attendance.toFixed(1)}%`} progress={attendance} />
 
-          <View className="flex-row flex-wrap justify-between gap-3">
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', gap: 12 }}>
             <View className="w-[48%]"><MetricTile label="Attendance streak" value="12 days" tone="emerald" /></View>
             <View className="w-[48%]"><MetricTile label="Risk score" value={fraudAttempts > 10 ? 'Watch' : 'Low'} tone={fraudAttempts > 10 ? 'amber' : 'emerald'} /></View>
             <View className="w-[48%]"><MetricTile label="Active sessions" value={String(activeSessions)} tone="cyan" /></View>
@@ -37,13 +38,13 @@ export default function DashboardScreen() {
           </View>
 
           <NativeSection title="Upcoming classes" action="Today">
-            <View className="space-y-3">
+            <View style={{ gap: 12 }}>
               {classes.map((course) => (
-                <View key={course.title} className="rounded-[22px] border border-white/10 bg-white/5 p-4">
-                  <View className="flex-row items-center justify-between">
+                <View key={course.title} style={{ borderRadius: 22, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)', padding: 16 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <View>
-                      <Text className="text-base font-semibold text-white">{course.title}</Text>
-                      <Text className="mt-1 text-sm text-slate-400">{course.room}</Text>
+                      <Text style={{ fontSize: 16, fontWeight: '600', color: theme.colors.text }}>{course.title}</Text>
+                      <Text style={{ marginTop: 4, fontSize: 14, color: theme.colors.muted }}>{course.room}</Text>
                     </View>
                     <StatusPill tone="sky" label={course.time} />
                   </View>
@@ -54,21 +55,21 @@ export default function DashboardScreen() {
 
           <NativeSection title="Quick scan access" action="Primary action">
             <PrimaryButton title="Open scanner" onPress={() => router.push('/(tabs)/scan' as never)} tone="sky" icon="qr-code" />
-            <View className="mt-4 flex-row gap-3">
-              <Pressable onPress={() => router.push('/attendance-history' as never)} className="flex-1 rounded-[18px] border border-white/10 bg-white/5 px-4 py-4">
-                <Text className="text-center text-sm font-semibold text-white">History</Text>
+            <View style={{ marginTop: 16, flexDirection: 'row', gap: 12 }}>
+              <Pressable onPress={() => router.push('/attendance-history' as never)} style={{ flex: 1, borderRadius: 18, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)', paddingHorizontal: 16, paddingVertical: 16 }}>
+                <Text style={{ textAlign: 'center', fontSize: 14, fontWeight: '600', color: theme.colors.text }}>History</Text>
               </Pressable>
-              <Pressable onPress={() => router.push('/notifications' as never)} className="flex-1 rounded-[18px] border border-white/10 bg-white/5 px-4 py-4">
-                <Text className="text-center text-sm font-semibold text-white">Alerts</Text>
+              <Pressable onPress={() => router.push('/notifications' as never)} style={{ flex: 1, borderRadius: 18, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)', paddingHorizontal: 16, paddingVertical: 16 }}>
+                <Text style={{ textAlign: 'center', fontSize: 14, fontWeight: '600', color: theme.colors.text }}>Alerts</Text>
               </Pressable>
             </View>
           </NativeSection>
 
           <GlassCard>
-            <View className="flex-row items-center justify-between">
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
               <View>
-                <Text className="text-sm uppercase tracking-[0.35em] text-slate-500">Session state</Text>
-                <Text className="mt-2 text-lg font-semibold text-white">Trust verified</Text>
+                <Text style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 1.4, color: theme.colors.muted }}>Session state</Text>
+                <Text style={{ marginTop: 8, fontSize: 18, fontWeight: '600', color: theme.colors.text }}>Trust verified</Text>
               </View>
               <StatusPill tone="emerald" label="online" />
             </View>

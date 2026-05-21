@@ -1,5 +1,6 @@
 import { ScrollView, Text, View } from 'react-native';
 import { GlassCard, MetricTile, NativeSection, PremiumTitle, Screen } from '../../components/experience';
+import { theme } from '@secure-attendance/ui';
 
 const weekly = [92, 95, 89, 97, 96, 94, 98];
 
@@ -19,18 +20,18 @@ export default function AnalyticsScreen() {
             <View className="flex-row items-end gap-2">
               {weekly.map((value, index) => (
                 <View key={index} className="flex-1 items-center gap-2">
-                  <View className="h-48 w-full justify-end overflow-hidden rounded-2xl bg-slate-800/80">
-                    <View className="rounded-2xl bg-gradient-to-t from-sky-500 to-emerald-400" style={{ height: `${value}%` }} />
+                  <View style={{ height: 192, width: '100%', justifyContent: 'flex-end', overflow: 'hidden', borderRadius: 16, backgroundColor: 'rgba(15,23,42,0.8)' }}>
+                    <View style={{ borderRadius: 16, backgroundColor: theme.colors.primary, height: `${value}%` }} />
                   </View>
-                  <Text className="text-xs text-slate-500">{index + 1}</Text>
+                  <Text style={{ fontSize: 12, color: theme.colors.muted }}>{index + 1}</Text>
                 </View>
               ))}
             </View>
           </NativeSection>
 
           <GlassCard>
-            <Text className="text-sm uppercase tracking-[0.35em] text-slate-500">Class comparison</Text>
-            <Text className="mt-2 text-base font-semibold text-white">Engineering leads the week. Business needs attention.</Text>
+            <Text style={{ fontSize: 14, textTransform: 'uppercase', letterSpacing: 1.4, color: theme.colors.muted }}>Class comparison</Text>
+            <Text style={{ marginTop: 8, fontSize: 16, fontWeight: '600', color: theme.colors.text }}>Engineering leads the week. Business needs attention.</Text>
           </GlassCard>
         </View>
       </ScrollView>

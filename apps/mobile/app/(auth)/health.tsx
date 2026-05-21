@@ -2,6 +2,7 @@ import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 import { GlassCard, PrimaryButton, Screen, StatusPill } from '../../components/experience';
+import { theme } from '@secure-attendance/ui';
 
 export default function HealthCheckScreen() {
   const [status, setStatus] = useState<'checking' | 'healthy' | 'error'>('checking');
@@ -50,22 +51,22 @@ export default function HealthCheckScreen() {
         <GlassCard className="space-y-6">
           <View className="items-center gap-4">
             <StatusPill tone={status === 'healthy' ? 'emerald' : status === 'error' ? 'rose' : 'sky'} label={status === 'checking' ? 'Checking' : status === 'healthy' ? 'Connected' : 'Attention'} />
-            <Text className="text-center text-3xl font-bold text-white">System health check</Text>
-            <Text className="text-center text-sm leading-6 text-slate-300">We validate API reachability before entering the trust layer.</Text>
+            <Text style={{ textAlign: 'center', fontSize: 30, fontWeight: '700', color: theme.colors.text }}>System health check</Text>
+            <Text style={{ textAlign: 'center', fontSize: 14, lineHeight: 22, color: theme.colors.muted }}>We validate API reachability before entering the trust layer.</Text>
           </View>
 
           <View className="items-center gap-5">
             {status === 'checking' ? <ActivityIndicator size="large" color="#38bdf8" /> : null}
             {status === 'healthy' ? <Text className="text-5xl">✓</Text> : null}
             {status === 'error' ? <Text className="text-5xl">⚠</Text> : null}
-            <Text className={`text-center text-base ${status === 'healthy' ? 'text-emerald-300' : status === 'error' ? 'text-rose-200' : 'text-slate-200'}`}>{message}</Text>
+            <Text style={{ textAlign: 'center', fontSize: 16, color: status === 'healthy' ? theme.colors.success : status === 'error' ? theme.colors.danger : theme.colors.text }}>{message}</Text>
           </View>
 
           {status === 'error' ? (
             <View className="space-y-3">
               <PrimaryButton title="Retry health check" onPress={() => router.replace('/(auth)/health' as never)} tone="sky" />
               <Pressable onPress={() => router.replace('/(auth)/login' as never)}>
-                <Text className="text-center text-sm text-cyan-300">Skip to login</Text>
+                <Text style={{ textAlign: 'center', fontSize: 14, color: theme.colors.live }}>Skip to login</Text>
               </Pressable>
             </View>
           ) : null}

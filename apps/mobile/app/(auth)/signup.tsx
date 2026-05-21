@@ -1,12 +1,13 @@
 import { router } from 'expo-router';
 import { Text, TextInput, View } from 'react-native';
 import { GlassCard, PrimaryButton, PremiumTitle, Screen } from '../../components/experience';
+import { theme } from '@secure-attendance/ui';
 
 export default function SignupScreen() {
   return (
     <Screen>
-      <View className="flex-1 justify-between py-4">
-        <View className="space-y-6">
+      <View style={{ flex: 1, justifyContent: 'space-between', paddingVertical: 16 }}>
+        <View style={{ gap: 24 }}>
           <PremiumTitle
             eyebrow="Institution onboarding"
             title="Create workspace access."
@@ -14,17 +15,22 @@ export default function SignupScreen() {
           />
 
           <GlassCard>
-            <View className="gap-4">
+            <View style={{ gap: 16 }}>
               {['Institution name', 'Work email', 'Department', 'Region'].map((label) => (
-                <TextInput key={label} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-white" placeholder={label} placeholderTextColor="#94a3b8" />
+                <TextInput
+                  key={label}
+                  style={{ borderRadius: 16, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)', paddingHorizontal: 16, paddingVertical: 16, color: theme.colors.text }}
+                  placeholder={label}
+                  placeholderTextColor={theme.colors.muted}
+                />
               ))}
             </View>
           </GlassCard>
         </View>
 
-        <View className="gap-3">
+        <View style={{ gap: 12 }}>
           <PrimaryButton title="Create account" onPress={() => router.replace('/(auth)/login' as never)} tone="emerald" />
-          <Text className="text-center text-xs uppercase tracking-[0.35em] text-slate-500">Secure onboarding · mobile-first</Text>
+          <Text style={{ textAlign: 'center', fontSize: 11, textTransform: 'uppercase', letterSpacing: 1.4, color: theme.colors.muted }}>Secure onboarding · mobile-first</Text>
         </View>
       </View>
     </Screen>

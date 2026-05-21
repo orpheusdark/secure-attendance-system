@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, Pressable } from 'react-native';
 import { mobileTabs } from '@secure-attendance/ui';
 import { TabButton } from '../../components/experience';
+import { theme } from '@secure-attendance/ui';
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
@@ -16,17 +17,17 @@ export default function TabsLayout() {
         const activeRoute = props.state.routes[props.state.index]?.name ?? 'dashboard';
 
         return (
-          <View style={{ paddingBottom: Math.max(insets.bottom, 10) + 8 }} className="border-t border-white/10 bg-[#06101d]/95 px-4 pt-3">
-            <View className="flex-row items-end justify-between gap-2 rounded-[28px] border border-white/10 bg-white/5 px-2 py-2">
+          <View style={{ paddingBottom: Math.max(insets.bottom, 10) + 8, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.06)', backgroundColor: theme.colors.background }}>
+            <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', gap: 8, borderRadius: 28, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)', paddingHorizontal: 8, paddingVertical: 8, marginHorizontal: 16, marginTop: 12 }}>
               {tabConfig.map((tab) => {
                 if (tab.route.includes('/scan')) {
                   return (
                     <Pressable
                       key={tab.label}
                       onPress={() => router.push(tab.route as never)}
-                      className="-mt-7 h-16 w-16 items-center justify-center rounded-full border border-cyan-300/30 bg-gradient-to-br from-cyan-300 to-sky-400 shadow-lg shadow-cyan-950/40"
+                      style={{ marginTop: -28, height: 64, width: 64, alignItems: 'center', justifyContent: 'center', borderRadius: 999, borderWidth: 1, borderColor: 'rgba(255,255,255,0.12)', backgroundColor: theme.colors.primary, shadowColor: '#000', shadowOpacity: 0.3, shadowRadius: 18, elevation: 6 }}
                     >
-                      <Text className="text-2xl">⌁</Text>
+                      <Text style={{ fontSize: 24, color: '#fff' }}>⌁</Text>
                     </Pressable>
                   );
                 }

@@ -2,6 +2,7 @@ import { router } from 'expo-router';
 import { useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { Screen, PulseRing } from '../components/experience';
+import { theme } from '@secure-attendance/ui';
 
 export default function SplashScreen() {
   useEffect(() => {
@@ -11,11 +12,11 @@ export default function SplashScreen() {
 
   return (
     <Screen>
-      <View className="flex-1 items-center justify-center gap-8">
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 32 }}>
         <PulseRing label="booting" value="SA" progress={92} />
-        <View className="items-center gap-2">
-          <Text className="text-2xl font-bold text-white">Secure Attendance</Text>
-          <Text className="text-sm text-slate-400">Operational trust layer starting up</Text>
+        <View style={{ alignItems: 'center', gap: 8 }}>
+          <Text style={{ fontSize: 24, fontWeight: '700', color: theme.colors.text }}>Secure Attendance</Text>
+          <Text style={{ fontSize: 14, color: theme.colors.muted }}>Operational trust layer starting up</Text>
         </View>
       </View>
     </Screen>

@@ -1,5 +1,6 @@
 import { ScrollView, Text, View } from 'react-native';
 import { GlassCard, PremiumTitle, Screen, StatusPill } from '../components/experience';
+import { theme } from '@secure-attendance/ui';
 
 const history = [
   { session: 'Advanced UI Systems', status: 'Verified', time: '08:02' },
@@ -10,17 +11,17 @@ const history = [
 export default function AttendanceHistoryScreen() {
   return (
     <Screen>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerClassName="pb-8">
-        <View className="space-y-6">
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
+        <View style={{ gap: 24 }}>
           <PremiumTitle eyebrow="History" title="Attendance history." subtitle="Review trusted, pending, and verified sessions with a clean native timeline." />
 
           {history.map((item) => (
             <GlassCard key={item.session} className="gap-3">
-              <View className="flex-row items-center justify-between">
-                <Text className="text-base font-semibold text-white">{item.session}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Text style={{ fontSize: 16, fontWeight: '600', color: theme.colors.text }}>{item.session}</Text>
                 <StatusPill tone={item.status === 'Verified' ? 'emerald' : 'amber'} label={item.status} />
               </View>
-              <Text className="text-sm text-slate-400">Marked at {item.time}</Text>
+              <Text style={{ fontSize: 14, color: theme.colors.muted }}>Marked at {item.time}</Text>
             </GlassCard>
           ))}
         </View>

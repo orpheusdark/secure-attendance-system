@@ -16,11 +16,11 @@ export default function FraudAlertsScreen() {
 
           {alerts.map((item) => (
             <GlassCard key={item.title} className="gap-3">
-              <View className="flex-row items-center justify-between">
-                <Text className="text-base font-semibold text-white">{item.title}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Text style={{ fontSize: 16, fontWeight: '600', color: '#fff' }}>{item.title}</Text>
                 <StatusPill tone={item.tone} label={item.tone} />
               </View>
-              <Text className="text-sm leading-6 text-slate-300">{item.detail}</Text>
+              <Text style={{ fontSize: 14, lineHeight: 22, color: '#cbd5e1' }}>{item.detail}</Text>
             </GlassCard>
           ))}
         </View>

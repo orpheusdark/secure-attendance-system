@@ -4,6 +4,7 @@ import * as Device from 'expo-device';
 import { router } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import { ActivityIndicator, Text, TextInput, View } from 'react-native';
+import { theme } from '@secure-attendance/ui';
 import { z } from 'zod';
 import { login } from '../../lib/api';
 import { saveSession } from '../../lib/session';
@@ -59,9 +60,9 @@ export default function LoginScreen() {
                 name="email"
                 render={({ field: { onChange, value } }) => (
                   <TextInput
-                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-white"
+                    style={{ borderRadius: 16, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)', paddingHorizontal: 16, paddingVertical: 16, color: theme.colors.text }}
                     placeholder="Email"
-                    placeholderTextColor="#94a3b8"
+                    placeholderTextColor={theme.colors.muted}
                     keyboardType="email-address"
                     autoCapitalize="none"
                     value={value}
@@ -74,9 +75,9 @@ export default function LoginScreen() {
                 name="password"
                 render={({ field: { onChange, value } }) => (
                   <TextInput
-                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-white"
+                    style={{ borderRadius: 16, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)', paddingHorizontal: 16, paddingVertical: 16, color: theme.colors.text }}
                     placeholder="Password"
-                    placeholderTextColor="#94a3b8"
+                    placeholderTextColor={theme.colors.muted}
                     secureTextEntry
                     value={value}
                     onChangeText={onChange}
@@ -90,15 +91,15 @@ export default function LoginScreen() {
               <StatusPill tone="amber" label="Biometric-ready" />
             </View>
 
-            {loginMutation.isError ? <Text className="mt-4 text-sm text-rose-300">{loginMutation.error.message}</Text> : null}
+            {loginMutation.isError ? <Text style={{ marginTop: 16, fontSize: 14, color: theme.colors.danger }}>{loginMutation.error.message}</Text> : null}
           </GlassCard>
         </View>
 
         <View className="gap-3">
           <PrimaryButton title="Need institution access?" onPress={() => router.push('/(auth)/signup' as never)} tone="emerald" />
           <View className="flex-row items-center justify-between">
-            <Text className="text-xs uppercase tracking-[0.35em] text-slate-500">Demo</Text>
-            <Text className="text-xs text-slate-400">teacher@nexus.edu / Password123!</Text>
+            <Text style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 1.4, color: theme.colors.muted }}>Demo</Text>
+            <Text style={{ fontSize: 11, color: theme.colors.muted }}>teacher@nexus.edu / Password123!</Text>
           </View>
         </View>
       </View>

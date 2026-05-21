@@ -23,17 +23,17 @@ export function GlassCard({ children, className = '' }: { children: ReactNode; c
 
 export function MetricTile({ label, value, tone = 'sky' }: { label: string; value: string; tone?: 'sky' | 'cyan' | 'emerald' | 'amber' | 'rose' }) {
   const colors = {
-    sky: 'text-sky-300',
-    cyan: 'text-cyan-300',
-    emerald: 'text-emerald-300',
-    amber: 'text-amber-300',
-    rose: 'text-rose-300',
+    sky: theme.colors.live,
+    cyan: theme.colors.live,
+    emerald: theme.colors.success,
+    amber: theme.colors.warning,
+    rose: theme.colors.danger,
   } as const;
 
   return (
     <GlassCard>
-      <Text className="text-xs uppercase tracking-[0.35em] text-slate-500">{label}</Text>
-      <Text className={`mt-3 text-3xl font-bold ${colors[tone]}`}>{value}</Text>
+      <Text style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: 0.7, color: theme.colors.muted }}>{label}</Text>
+      <Text style={{ marginTop: 12, fontSize: 30, fontWeight: '700', color: colors[tone] }}>{value}</Text>
     </GlassCard>
   );
 }
