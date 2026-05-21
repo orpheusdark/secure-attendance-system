@@ -2,7 +2,8 @@ import { useMutation } from '@tanstack/react-query';
 import { Camera, CameraView } from 'expo-camera';
 import * as Haptics from 'expo-haptics';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Animated, Easing, Text, View } from 'react-native';
+import { ActivityIndicator, Animated, Easing, Text, View, useWindowDimensions } from 'react-native';
+import { theme } from '@secure-attendance/ui';
 import { GlassCard, PremiumTitle, PulseRing, Screen, StatusPill } from '../../components/experience';
 
 type ScanState = 'scanning' | 'verifying' | 'success' | 'suspicious' | 'rejected';
@@ -18,7 +19,13 @@ const stateConfig: Record<ScanState, { tone: 'sky' | 'emerald' | 'amber' | 'rose
 export default function ScanScreen() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanState, setScanState] = useState<ScanState>('scanning');
+  const [scanCount, setScanCount] = useState(0);
+  const [cameraReady, setCameraReady] = useState(false);
   const line = useRef(new Animated.Value(0)).current;
+  const lastScanAt = useRef(0);
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { width } = useWindowDimensions();
+  const frameSize = Math.min(280, Math.max(220, Math.round(width * 0.72)));
 
   const stateCopy = useMemo(() => stateConfig[scanState], [scanState]);
 
@@ -40,7 +47,10 @@ export default function ScanScreen() {
     );
 
     animation.start();
-    return () => animation.stop();
+    return () => {
+      animation.stop();
+      if (resetTimer.current) clearTimeout(resetTimer.current);
+    };
   }, [line]);
 
   const lineStyle = {
@@ -76,11 +86,13 @@ export default function ScanScreen() {
       }
 
       setScanState('success');
+      setScanCount((value) => value + 1);
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       return { success: true, token: qrData };
     },
     onSettled: () => {
-      setTimeout(() => setScanState('scanning'), 2200);
+      if (resetTimer.current) clearTimeout(resetTimer.current);
+      resetTimer.current = setTimeout(() => setScanState('scanning'), 1800);
     },
   });
 
@@ -109,26 +121,30 @@ export default function ScanScreen() {
 
   return (
     <Screen>
-      <View className="flex-1">
+      <View style={{ flex: 1 }}>
         <PremiumTitle eyebrow="QR Scan" title="Scan with confidence." subtitle="The scanner validates session trust, GPS lock, and device confidence before marking attendance." />
 
-        <View className="mt-6 overflow-hidden rounded-[32px] border border-white/10 bg-black/40">
-          <View className="h-[440px] overflow-hidden rounded-[32px]">
+        <View style={{ marginTop: 24, overflow: 'hidden', borderRadius: 32, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(0,0,0,0.35)' }}>
+          <View style={{ height: 440, overflow: 'hidden', borderRadius: 32 }}>
             <CameraView
               barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
+              onCameraReady={() => setCameraReady(true)}
               onBarcodeScanned={({ data }) => {
-                if (scanState === 'scanning' && !scanMutation.isPending) {
+                if (!cameraReady || scanMutation.isPending || scanState !== 'scanning') return;
+                if (Date.now() - lastScanAt.current < 1400) return;
+                lastScanAt.current = Date.now();
                   scanMutation.mutate(data);
-                }
               }}
               style={{ flex: 1 }}
+              accessible
+              accessibilityLabel="QR code camera scanner"
             />
-            <View className="absolute inset-0 bg-[rgba(2,7,18,0.35)]" />
+            <View pointerEvents="none" style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(2,7,18,0.35)' }} />
 
-            <View className="absolute inset-0 items-center justify-center">
-              <View className="h-60 w-60 rounded-[36px] border border-cyan-300/30 bg-white/5 p-3">
-                <Animated.View style={lineStyle} className="absolute left-3 right-3 h-1 rounded-full bg-cyan-300" />
-                <View className="flex-1 items-center justify-center rounded-[28px] border border-white/10">
+            <View pointerEvents="none" style={{ position: 'absolute', inset: 0, alignItems: 'center', justifyContent: 'center' }}>
+              <View style={{ height: frameSize, width: frameSize, borderRadius: 36, borderWidth: 1, borderColor: 'rgba(103,232,249,0.3)', backgroundColor: 'rgba(255,255,255,0.05)', padding: 12 }}>
+                <Animated.View style={[lineStyle, { position: 'absolute', left: 12, right: 12, height: 4, borderRadius: 999, backgroundColor: theme.colors.live }]} />
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', borderRadius: 28, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)' }}>
                   <PulseRing label={stateCopy.label.toLowerCase()} value={scanState === 'success' ? 'OK' : scanState === 'suspicious' ? '!' : 'QR'} progress={scanState === 'verifying' ? 72 : scanState === 'success' ? 100 : 45} />
                 </View>
               </View>
@@ -137,21 +153,21 @@ export default function ScanScreen() {
         </View>
 
         <GlassCard className="mt-5 gap-4">
-          <View className="flex-row items-center justify-between">
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <StatusPill tone={stateCopy.tone} label={stateCopy.label} />
             <StatusPill tone="cyan" label="GPS lock" />
           </View>
-          <Text className="text-sm leading-6 text-slate-300">{stateCopy.message}</Text>
-          <Text className="text-xs uppercase tracking-[0.35em] text-slate-500">Live scan count: {scanMutation.isPending ? '1' : scanState === 'success' ? '1 verified' : '0'}</Text>
+          <Text style={{ fontSize: 14, lineHeight: 22, color: theme.colors.muted }}>{cameraReady ? stateCopy.message : 'Preparing camera and scanner overlay...'}</Text>
+          <Text style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 1.4, color: theme.colors.muted }}>Live scan count: {scanMutation.isPending ? '1' : scanCount > 0 ? `${scanCount} verified` : '0'}</Text>
 
-          <View className="flex-row gap-3">
-            <View className="flex-1 rounded-[20px] border border-white/10 bg-white/5 p-4">
-              <Text className="text-xs uppercase tracking-[0.35em] text-slate-500">Face preview</Text>
-              <Text className="mt-2 text-sm font-semibold text-white">Enabled</Text>
+          <View style={{ flexDirection: 'row', gap: 12 }}>
+            <View style={{ flex: 1, borderRadius: 20, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)', padding: 16 }}>
+              <Text style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 1.4, color: theme.colors.muted }}>Face preview</Text>
+              <Text style={{ marginTop: 8, fontSize: 14, fontWeight: '600', color: theme.colors.text }}>Enabled</Text>
             </View>
-            <View className="flex-1 rounded-[20px] border border-white/10 bg-white/5 p-4">
-              <Text className="text-xs uppercase tracking-[0.35em] text-slate-500">Session trust</Text>
-              <Text className="mt-2 text-sm font-semibold text-white">97%</Text>
+            <View style={{ flex: 1, borderRadius: 20, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)', padding: 16 }}>
+              <Text style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 1.4, color: theme.colors.muted }}>Session trust</Text>
+              <Text style={{ marginTop: 8, fontSize: 14, fontWeight: '600', color: theme.colors.text }}>97%</Text>
             </View>
           </View>
         </GlassCard>

@@ -18,7 +18,7 @@ export function PremiumTitle({ eyebrow, title, subtitle }: { eyebrow: string; ti
 }
 
 export function GlassCard({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <View style={{ borderRadius: 28, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)', padding: 20 }}>{children}</View>;
+  return <View className={className} style={{ borderRadius: 28, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)', padding: 20 }}>{children}</View>;
 }
 
 export function MetricTile({ label, value, tone = 'sky' }: { label: string; value: string; tone?: 'sky' | 'cyan' | 'emerald' | 'amber' | 'rose' }) {
@@ -65,7 +65,7 @@ export function PrimaryButton({ title, onPress, tone = 'sky', icon }: { title: s
   };
 
   return (
-    <Pressable onPress={onPress} style={{ overflow: 'hidden', borderRadius: 20 }}>
+    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={title} style={{ overflow: 'hidden', borderRadius: 20 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12, borderRadius: 20, paddingHorizontal: 20, paddingVertical: 14, backgroundColor: toneMap[tone] }}>
         {icon ? <Ionicons name={icon} size={18} color="#021019" /> : null}
         <Text style={{ fontSize: 16, fontWeight: '700', color: '#021019' }}>{title}</Text>
@@ -127,7 +127,7 @@ export function NativeSection({ title, action, children }: { title: string; acti
 
 export function TabButton({ label, icon, active, onPress, compact = false }: { label: string; icon: keyof typeof Ionicons.glyphMap; active: boolean; onPress: () => void; compact?: boolean }) {
   return (
-    <Pressable onPress={onPress} style={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: compact ? 12 : undefined, paddingVertical: compact ? 8 : 12, flex: compact ? undefined : 1 }}>
+    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ selected: active }} style={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: compact ? 12 : undefined, paddingVertical: compact ? 8 : 12, flex: compact ? undefined : 1 }}>
       <Ionicons name={icon} size={active ? 24 : 20} color={active ? theme.colors.live : theme.colors.muted} />
       {!compact ? <Text style={{ marginTop: 6, fontSize: 11, color: active ? theme.colors.live : theme.colors.muted }}>{label}</Text> : null}
     </Pressable>

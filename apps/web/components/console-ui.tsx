@@ -44,12 +44,12 @@ export function SectionCard({
 }) {
   return (
     <section className={cn('rounded-[32px] p-6 card', className)}>
-          <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-[11px] uppercase tracking-[0.4em] text-slate-500">{eyebrow}</p>
           <h2 className="mt-2 text-xl font-semibold tracking-tight text-white">{title}</h2>
         </div>
-        {action ? <div className="rounded-2xl border border-white/10 bg-white/5 p-2 text-slate-300">{action}</div> : null}
+        {action ? <div className="rounded-2xl border border-white/10 bg-white/5 p-2 text-slate-300" aria-hidden="true">{action}</div> : null}
       </div>
       <div className="mt-6">{children}</div>
     </section>
@@ -106,7 +106,7 @@ export function PageChrome({ children }: { children: React.ReactNode }) {
                 </div>
               ) : null}
             </div>
-            <button className="rounded-2xl border border-white/10 bg-white/5 p-2 text-slate-300 transition hover:bg-white/10" onClick={() => setCollapsed((value) => !value)} aria-label="Toggle sidebar">
+            <button className="rounded-2xl border border-white/10 bg-white/5 p-2 text-slate-300 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/50" onClick={() => setCollapsed((value) => !value)} aria-label="Toggle sidebar">
               {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
             </button>
           </div>
@@ -161,13 +161,13 @@ export function PageChrome({ children }: { children: React.ReactNode }) {
                   <ArrowLeftRight className="h-4 w-4" />
                   Nexus University
                 </button>
-                <button className="rounded-2xl border border-white/10 bg-white/5 p-3 text-slate-300 transition hover:bg-white/10" aria-label="Notifications">
+                <button className="rounded-2xl border border-white/10 bg-white/5 p-3 text-slate-300 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/50" aria-label="Notifications">
                   <Bell className="h-4 w-4" />
                 </button>
-                <button className="rounded-2xl border border-white/10 bg-white/5 p-3 text-slate-300 transition hover:bg-white/10" aria-label="Profile">
+                <button className="rounded-2xl border border-white/10 bg-white/5 p-3 text-slate-300 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/50" aria-label="Profile">
                   <UserCircle2 className="h-4 w-4" />
                 </button>
-                <button className="rounded-2xl border border-white/10 bg-white/5 p-3 text-slate-300 transition hover:bg-white/10 xl:hidden" onClick={() => setCollapsed((value) => !value)} aria-label="Toggle menu">
+                <button className="rounded-2xl border border-white/10 bg-white/5 p-3 text-slate-300 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/50 xl:hidden" onClick={() => setCollapsed((value) => !value)} aria-label="Toggle menu">
                   <Menu className="h-4 w-4" />
                 </button>
               </div>
