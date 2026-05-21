@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 
-function resolveApiUrl() {
+export function resolveApiUrl() {
   const rawUrl =
     (globalThis as typeof globalThis & { process?: { env?: Record<string, string | undefined> } }).process?.env?.['EXPO_PUBLIC_API_URL'] ??
     'http://localhost:4000/api/v1';
@@ -19,7 +19,7 @@ function resolveApiUrl() {
   }
 }
 
-const apiUrl = resolveApiUrl();
+export const apiBaseUrl = resolveApiUrl();
 
 type RequestOptions = RequestInit & { token?: string };
 
@@ -27,7 +27,7 @@ async function requestJson<T>(path: string, options: RequestOptions = {}): Promi
   let response: Response;
 
   try {
-    response = await fetch(`${apiUrl}${path}`, {
+    response = await fetch(`${apiBaseUrl}${path}`, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ async function requestJson<T>(path: string, options: RequestOptions = {}): Promi
     });
   } catch (err) {
     throw new Error(
-      `Unable to reach the API at ${apiUrl}. If you're using Expo Go on a phone, set EXPO_PUBLIC_API_URL to your computer's LAN IP (for example http://192.168.1.10:4000/api/v1) and restart Expo.`,
+      `Unable to reach the API at ${apiBaseUrl}. If you're using Expo Go on a phone, set EXPO_PUBLIC_API_URL to your computer's LAN IP (for example http://192.168.1.10:4000/api/v1) and restart Expo.`,
     );
   }
 
@@ -58,7 +58,7 @@ export async function login(email: string, password: string, deviceId: string) {
     },
   );
   // Persist the working API URL
-  await SecureStore.setItemAsync('api_url', apiUrl);
+  await SecureStore.setItemAsync('api_url', apiBaseUrl);
   return result;
 }
 

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 import { GlassCard, PrimaryButton, Screen, StatusPill } from '../../components/experience';
 import { theme } from '@secure-attendance/ui';
+import { apiBaseUrl } from '../../lib/api';
 
 export default function HealthCheckScreen() {
   const [status, setStatus] = useState<'checking' | 'healthy' | 'error'>('checking');
@@ -11,14 +12,10 @@ export default function HealthCheckScreen() {
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        const apiUrl =
-          (globalThis as typeof globalThis & { process?: { env?: Record<string, string | undefined> } }).process?.env?.['EXPO_PUBLIC_API_URL'] ??
-          'http://localhost:4000/api/v1';
-
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-        const response = await fetch(`${apiUrl.replace('/api/v1', '')}/`, {
+        const response = await fetch(`${apiBaseUrl.replace('/api/v1', '')}/`, {
           method: 'GET',
           signal: controller.signal,
         });
@@ -35,10 +32,7 @@ export default function HealthCheckScreen() {
         }
       } catch {
         setStatus('error');
-        const apiUrl =
-          (globalThis as typeof globalThis & { process?: { env?: Record<string, string | undefined> } }).process?.env?.['EXPO_PUBLIC_API_URL'] ??
-          'http://localhost:4000/api/v1';
-        setMessage(`Cannot reach API at ${apiUrl}. Check your network or API URL.`);
+        setMessage(`Cannot reach API at ${apiBaseUrl}. Check your network or set EXPO_PUBLIC_API_URL to a LAN address.`);
       }
     };
 
@@ -60,6 +54,7 @@ export default function HealthCheckScreen() {
             {status === 'healthy' ? <Text className="text-5xl">✓</Text> : null}
             {status === 'error' ? <Text className="text-5xl">⚠</Text> : null}
             <Text style={{ textAlign: 'center', fontSize: 16, color: status === 'healthy' ? theme.colors.success : status === 'error' ? theme.colors.danger : theme.colors.text }}>{message}</Text>
+            <Text style={{ textAlign: 'center', fontSize: 12, color: theme.colors.muted }}>Current API base: {apiBaseUrl}</Text>
           </View>
 
           {status === 'error' ? (
