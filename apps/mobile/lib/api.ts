@@ -69,10 +69,14 @@ type RequestOptions = RequestInit & { token?: string };
 
 async function requestJson<T>(path: string, options: RequestOptions = {}): Promise<T> {
   let response: Response;
+  const timeoutMs = 8000;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     response = await fetch(`${apiBaseUrl}${path}`, {
       ...options,
+      signal: options.signal ?? controller.signal,
       headers: {
         'Content-Type': 'application/json',
         ...(options.token ? { Authorization: `Bearer ${options.token}` } : {}),
@@ -80,9 +84,14 @@ async function requestJson<T>(path: string, options: RequestOptions = {}): Promi
       },
     });
   } catch (err) {
+    if ((err as Error).name === 'AbortError') {
+      throw new Error(`Timed out waiting for the API at ${apiBaseUrl}.`);
+    }
     throw new Error(
       `Unable to reach the API at ${apiBaseUrl}. If you're using Expo Go on a phone, set EXPO_PUBLIC_API_URL to your computer's LAN IP (for example http://192.168.1.10:4000/api/v1) and restart Expo.`,
     );
+  } finally {
+    clearTimeout(timeoutId);
   }
 
   if (!response.ok) {
@@ -94,6 +103,20 @@ async function requestJson<T>(path: string, options: RequestOptions = {}): Promi
 }
 
 export async function login(email: string, password: string, deviceId: string) {
+  const demoMode = await SecureStore.getItemAsync('demo_mode');
+
+  if (demoMode === 'true') {
+    if (email.toLowerCase() !== demoUser.email || password !== 'Password123!') {
+      throw new Error(`Demo mode is active. Use ${demoUser.email} / Password123!`);
+    }
+
+    const accessToken = `demo-access-${deviceId}`;
+    const refreshToken = `demo-refresh-${deviceId}`;
+
+    await SecureStore.setItemAsync('api_url', apiBaseUrl);
+    return { accessToken, refreshToken, user: demoUser };
+  }
+
   try {
     const result = await requestJson<{ accessToken: string; refreshToken: string; user: { id: string; role: string; name: string; email: string } }>(
       '/auth/login',

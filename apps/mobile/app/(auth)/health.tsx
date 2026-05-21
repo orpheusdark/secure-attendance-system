@@ -4,6 +4,7 @@ import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 import { GlassCard, PrimaryButton, Screen, StatusPill } from '../../components/experience';
 import { theme } from '@secure-attendance/ui';
 import { apiBaseUrl } from '../../lib/api';
+import * as SecureStore from 'expo-secure-store';
 
 export default function HealthCheckScreen() {
   const [status, setStatus] = useState<'checking' | 'healthy' | 'error'>('checking');
@@ -31,6 +32,7 @@ export default function HealthCheckScreen() {
           setMessage(`API returned status ${response.status}. Please try again.`);
         }
       } catch {
+        await SecureStore.setItemAsync('demo_mode', 'true');
         setStatus('healthy');
         setMessage(`Cannot reach API at ${apiBaseUrl}. Continuing in demo mode.`);
         setTimeout(() => router.replace('/(auth)/login' as never), 1200);
