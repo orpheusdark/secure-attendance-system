@@ -9,9 +9,9 @@ export default function ReportsPage() {
       <SectionCard title="Reports" eyebrow="Signed exports" action={<FileText className="h-4 w-4" />}>
         <div className="grid gap-4 md:grid-cols-2">
           {reports.map((report) => (
-            <div key={report} className="rounded-[22px] border border-white/10 bg-white/5 p-4">
+            <div key={report} className="rounded-[22px] glass p-4">
               <p className="font-medium text-white">{report}</p>
-              <p className="mt-2 text-sm text-slate-400">Generate a secure export with timestamps and audit metadata.</p>
+              <p className="mt-2 text-sm muted">Generate a secure export with timestamps and audit metadata.</p>
             </div>
           ))}
         </div>

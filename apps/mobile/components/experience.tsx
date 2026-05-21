@@ -1,24 +1,24 @@
 import { Ionicons } from '@expo/vector-icons';
-import { ReactNode } from 'react';
-import { Pressable, Text, View } from 'react-native';
-import Animated, { Easing, interpolateColor, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import { ReactNode, useEffect, useRef } from 'react';
+import { Animated, Easing, Pressable, Text, View } from 'react-native';
+import { theme } from '@secure-attendance/ui';
 
 export function Screen({ children }: { children: ReactNode }) {
-  return <View className="flex-1 bg-[#020712] px-5 pt-4">{children}</View>;
+  return <View style={{ flex: 1, backgroundColor: theme.colors.background, paddingHorizontal: 20, paddingTop: 16 }}>{children}</View>;
 }
 
 export function PremiumTitle({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle: string }) {
   return (
-    <View className="space-y-3">
-      <Text className="text-[11px] uppercase tracking-[0.45em] text-sky-300">{eyebrow}</Text>
-      <Text className="text-4xl font-bold tracking-tight text-white">{title}</Text>
-      <Text className="max-w-[32rem] text-sm leading-6 text-slate-300">{subtitle}</Text>
+    <View style={{ gap: 8 }}>
+      <Text style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 1.8, color: theme.colors.live }}>{eyebrow}</Text>
+      <Text style={{ fontSize: 28, fontWeight: '700', color: theme.colors.text }}>{title}</Text>
+      <Text style={{ maxWidth: 512, fontSize: 14, lineHeight: 22, color: theme.colors.muted }}>{subtitle}</Text>
     </View>
   );
 }
 
 export function GlassCard({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <View className={`rounded-[28px] border border-white/10 bg-white/5 p-5 ${className}`}>{children}</View>;
+  return <View style={{ borderRadius: 28, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', backgroundColor: 'rgba(255,255,255,0.03)', padding: 20 }}>{children}</View>;
 }
 
 export function MetricTile({ label, value, tone = 'sky' }: { label: string; value: string; tone?: 'sky' | 'cyan' | 'emerald' | 'amber' | 'rose' }) {
@@ -39,54 +39,75 @@ export function MetricTile({ label, value, tone = 'sky' }: { label: string; valu
 }
 
 export function StatusPill({ label, tone = 'sky' }: { label: string; tone?: 'sky' | 'cyan' | 'emerald' | 'amber' | 'rose' }) {
-  const tones = {
-    sky: 'border-sky-400/20 bg-sky-400/10 text-sky-200',
-    cyan: 'border-cyan-400/20 bg-cyan-400/10 text-cyan-200',
-    emerald: 'border-emerald-400/20 bg-emerald-400/10 text-emerald-200',
-    amber: 'border-amber-400/20 bg-amber-400/10 text-amber-200',
-    rose: 'border-rose-400/20 bg-rose-400/10 text-rose-200',
-  } as const;
+  const toneMap: Record<'sky' | 'cyan' | 'emerald' | 'amber' | 'rose', { bg: string; color: string }> = {
+    sky: { bg: theme.colors.primary + '33', color: theme.colors.primary },
+    cyan: { bg: theme.colors.live + '33', color: theme.colors.live },
+    emerald: { bg: theme.colors.success + '22', color: theme.colors.success },
+    amber: { bg: theme.colors.warning + '22', color: theme.colors.warning },
+    rose: { bg: theme.colors.danger + '22', color: theme.colors.danger },
+  };
 
-  return <View className={`rounded-full border px-3 py-1.5 ${tones[tone]}`}><Text className="text-[11px] uppercase tracking-[0.3em]">{label}</Text></View>;
+  const toneStyle = toneMap[tone];
+  return (
+    <View style={{ borderRadius: 999, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', paddingHorizontal: 12, paddingVertical: 6, backgroundColor: toneStyle.bg }}>
+      <Text style={{ fontSize: 11, letterSpacing: 0.6, color: toneStyle.color, textTransform: 'uppercase' }}>{label}</Text>
+    </View>
+  );
 }
 
 export function PrimaryButton({ title, onPress, tone = 'sky', icon }: { title: string; onPress: () => void; tone?: 'sky' | 'cyan' | 'emerald' | 'amber' | 'rose'; icon?: keyof typeof Ionicons.glyphMap }) {
-  const buttonTone = {
-    sky: 'bg-sky-400',
-    cyan: 'bg-cyan-300',
-    emerald: 'bg-emerald-400',
-    amber: 'bg-amber-400',
-    rose: 'bg-rose-400',
-  } as const;
+  const toneMap: Record<string, string> = {
+    sky: theme.colors.primary,
+    cyan: theme.colors.live,
+    emerald: theme.colors.success,
+    amber: theme.colors.warning,
+    rose: theme.colors.danger,
+  };
 
   return (
-    <Pressable onPress={onPress} className="overflow-hidden rounded-[20px]">
-      <View className={`flex-row items-center justify-center gap-3 rounded-[20px] px-5 py-4 ${buttonTone[tone]}`}>
+    <Pressable onPress={onPress} style={{ overflow: 'hidden', borderRadius: 20 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12, borderRadius: 20, paddingHorizontal: 20, paddingVertical: 14, backgroundColor: toneMap[tone] }}>
         {icon ? <Ionicons name={icon} size={18} color="#021019" /> : null}
-        <Text className="text-base font-bold text-slate-950">{title}</Text>
+        <Text style={{ fontSize: 16, fontWeight: '700', color: '#021019' }}>{title}</Text>
       </View>
     </Pressable>
   );
 }
 
 export function PulseRing({ label, value, progress }: { label: string; value: string; progress: number }) {
-  const pulse = useSharedValue(0);
+  const pulse = useRef(new Animated.Value(0)).current;
 
-  pulse.value = withRepeat(withTiming(1, { duration: 2400, easing: Easing.inOut(Easing.ease) }), -1, true);
+  useEffect(() => {
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulse, { toValue: 1, duration: 1200, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+        Animated.timing(pulse, { toValue: 0, duration: 1200, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+      ]),
+    );
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: 0.96 + pulse.value * 0.06 }],
-    borderColor: interpolateColor(pulse.value, [0, 1], ['rgba(56,189,248,0.25)', 'rgba(52,211,153,0.5)']),
-  }));
+    animation.start();
+    return () => animation.stop();
+  }, [pulse]);
+
+  const animatedStyle = {
+    transform: [
+      {
+        scale: pulse.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0.96, 1.02],
+        }),
+      },
+    ],
+  } as const;
 
   return (
-    <View className="items-center justify-center">
-      <Animated.View style={animatedStyle} className="h-44 w-44 items-center justify-center rounded-full border bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.25),rgba(8,15,29,0.95)_68%)]">
-        <Text className="text-4xl font-bold text-white">{value}</Text>
-        <Text className="mt-1 text-[11px] uppercase tracking-[0.35em] text-slate-400">{label}</Text>
+    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+      <Animated.View style={[animatedStyle, { height: 176, width: 176, alignItems: 'center', justifyContent: 'center', borderRadius: 88, borderWidth: 1, borderColor: theme.colors.primary }]}>
+        <Text style={{ fontSize: 36, fontWeight: '700', color: '#fff' }}>{value}</Text>
+        <Text style={{ marginTop: 4, fontSize: 11, letterSpacing: 0.6, color: '#94a3b8', textTransform: 'uppercase' }}>{label}</Text>
       </Animated.View>
-      <View className="mt-4 h-2 w-56 overflow-hidden rounded-full bg-slate-800">
-        <View className="h-full rounded-full bg-gradient-to-r from-sky-400 to-emerald-400" style={{ width: `${progress}%` }} />
+      <View style={{ marginTop: 12, height: 8, width: 224, overflow: 'hidden', borderRadius: 999, backgroundColor: '#0b1220' }}>
+        <View style={{ height: '100%', borderRadius: 999, backgroundColor: theme.colors.primary, width: `${progress}%` }} />
       </View>
     </View>
   );
@@ -95,9 +116,9 @@ export function PulseRing({ label, value, progress }: { label: string; value: st
 export function NativeSection({ title, action, children }: { title: string; action?: string; children: ReactNode }) {
   return (
     <GlassCard className="mt-4">
-      <View className="mb-4 flex-row items-center justify-between">
-        <Text className="text-lg font-semibold text-white">{title}</Text>
-        {action ? <Text className="text-xs uppercase tracking-[0.35em] text-slate-500">{action}</Text> : null}
+      <View style={{ marginBottom: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 18, fontWeight: '600', color: theme.colors.text }}>{title}</Text>
+        {action ? <Text style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, color: theme.colors.muted }}>{String(action)}</Text> : null}
       </View>
       {children}
     </GlassCard>
@@ -106,9 +127,9 @@ export function NativeSection({ title, action, children }: { title: string; acti
 
 export function TabButton({ label, icon, active, onPress, compact = false }: { label: string; icon: keyof typeof Ionicons.glyphMap; active: boolean; onPress: () => void; compact?: boolean }) {
   return (
-    <Pressable onPress={onPress} className={`items-center justify-center ${compact ? 'px-3 py-2' : 'flex-1 py-3'}`}>
-      <Ionicons name={icon} size={active ? 24 : 20} color={active ? '#67e8f9' : '#94a3b8'} />
-      {!compact ? <Text className={`mt-1 text-[11px] ${active ? 'text-cyan-300' : 'text-slate-500'}`}>{label}</Text> : null}
+    <Pressable onPress={onPress} style={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: compact ? 12 : undefined, paddingVertical: compact ? 8 : 12, flex: compact ? undefined : 1 }}>
+      <Ionicons name={icon} size={active ? 24 : 20} color={active ? theme.colors.live : theme.colors.muted} />
+      {!compact ? <Text style={{ marginTop: 6, fontSize: 11, color: active ? theme.colors.live : theme.colors.muted }}>{label}</Text> : null}
     </Pressable>
   );
 }

@@ -19,10 +19,10 @@ import { useMemo, useState } from 'react';
 import { cn, consoleNavigation, FeedItem, LiveSignal } from '@secure-attendance/ui';
 
 const toneClasses = {
-  emerald: 'border-emerald-400/20 bg-emerald-400/10 text-emerald-200',
-  cyan: 'border-cyan-400/20 bg-cyan-400/10 text-cyan-200',
-  amber: 'border-amber-400/20 bg-amber-400/10 text-amber-200',
-  rose: 'border-rose-400/20 bg-rose-400/10 text-rose-200',
+  emerald: 'pill-emerald border-transparent',
+  cyan: 'pill-cyan border-transparent',
+  amber: 'pill-amber border-transparent',
+  rose: 'pill-rose border-transparent',
 } as const;
 
 export function StatusPill({ tone, children }: { tone: keyof typeof toneClasses | LiveSignal['tone']; children: React.ReactNode }) {
@@ -43,8 +43,8 @@ export function SectionCard({
   className?: string;
 }) {
   return (
-    <section className={cn('rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(11,18,33,0.88),rgba(8,15,29,0.96))] p-6 shadow-[0_20px_60px_rgba(2,6,23,0.28)]', className)}>
-      <div className="flex items-start justify-between gap-4">
+    <section className={cn('rounded-[32px] p-6 card', className)}>
+          <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-[11px] uppercase tracking-[0.4em] text-slate-500">{eyebrow}</p>
           <h2 className="mt-2 text-xl font-semibold tracking-tight text-white">{title}</h2>
@@ -58,11 +58,7 @@ export function SectionCard({
 
 export function MetricCard({ label, value, delta, tone, compact }: { label: string; value: string; delta: string; tone: keyof typeof toneClasses; compact?: boolean }) {
   return (
-    <motion.div
-      whileHover={{ y: -3 }}
-      transition={{ type: 'spring', stiffness: 280, damping: 20 }}
-      className={cn('rounded-[28px] border p-5 shadow-[0_16px_50px_rgba(2,6,23,0.22)]', toneClasses[tone], compact ? 'min-h-[150px]' : 'min-h-[172px]')}
-    >
+    <motion.div whileHover={{ y: -3 }} transition={{ type: 'spring', stiffness: 280, damping: 20 }} className={cn('rounded-[28px] p-5 shadow-[0_16px_50px_rgba(2,6,23,0.22)]', toneClasses[tone], compact ? 'min-h-[150px]' : 'min-h-[172px]')}>
       <p className="text-xs uppercase tracking-[0.34em] text-slate-400">{label}</p>
       <p className="mt-5 text-3xl font-semibold tracking-tight text-white">{value}</p>
       <p className="mt-3 text-sm leading-6 text-slate-300">{delta}</p>

@@ -1,9 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import { Camera, CameraView } from 'expo-camera';
 import * as Haptics from 'expo-haptics';
-import { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { ActivityIndicator, Animated, Easing, Text, View } from 'react-native';
 import { GlassCard, PremiumTitle, PulseRing, Screen, StatusPill } from '../../components/experience';
 
 type ScanState = 'scanning' | 'verifying' | 'success' | 'suspicious' | 'rejected';
@@ -19,8 +18,7 @@ const stateConfig: Record<ScanState, { tone: 'sky' | 'emerald' | 'amber' | 'rose
 export default function ScanScreen() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanState, setScanState] = useState<ScanState>('scanning');
-  const rotation = useSharedValue(0);
-  const line = useSharedValue(0);
+  const line = useRef(new Animated.Value(0)).current;
 
   const stateCopy = useMemo(() => stateConfig[scanState], [scanState]);
 
@@ -34,14 +32,31 @@ export default function ScanScreen() {
       }
     })();
 
-    rotation.value = withRepeat(withTiming(1, { duration: 2600, easing: Easing.inOut(Easing.ease) }), -1, true);
-    line.value = withRepeat(withTiming(1, { duration: 1800, easing: Easing.inOut(Easing.ease) }), -1, false);
-  }, [line, rotation]);
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(line, { toValue: 1, duration: 1800, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+        Animated.timing(line, { toValue: 0, duration: 1800, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+      ]),
+    );
 
-  const lineStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: 20 + line.value * 220 }],
-    opacity: 0.5 + line.value * 0.4,
-  }));
+    animation.start();
+    return () => animation.stop();
+  }, [line]);
+
+  const lineStyle = {
+    transform: [
+      {
+        translateY: line.interpolate({
+          inputRange: [0, 1],
+          outputRange: [20, 240],
+        }),
+      },
+    ],
+    opacity: line.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0.5, 0.9],
+    }),
+  } as const;
 
   const scanMutation = useMutation({
     mutationFn: async (qrData: string) => {

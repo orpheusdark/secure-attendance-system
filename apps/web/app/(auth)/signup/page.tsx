@@ -8,14 +8,10 @@ export default function SignupPage() {
   return (
     <main className="min-h-screen px-4 py-6 md:px-6 lg:px-8">
       <div className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-7xl gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-        <motion.section
-          initial={{ opacity: 0, x: -16 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="rounded-[36px] border border-white/10 bg-slate-950/80 p-8 backdrop-blur-xl"
-        >
-          <p className="text-xs uppercase tracking-[0.4em] text-sky-300">Institution onboarding</p>
+        <motion.section initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} className="rounded-[36px] p-8 card">
+          <p className="text-xs uppercase tracking-[0.4em] accent">Institution onboarding</p>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight text-white md:text-5xl">Create a secure attendance workspace.</h1>
-          <p className="mt-5 max-w-xl text-sm leading-7 text-slate-300 md:text-base">
+          <p className="mt-5 max-w-xl text-sm leading-7 muted md:text-base">
             Configure trust policies, departments, biometrics, and live fraud rules from a modern enterprise onboarding flow.
           </p>
 
@@ -33,21 +29,17 @@ export default function SignupPage() {
           </div>
         </motion.section>
 
-        <motion.section
-          initial={{ opacity: 0, x: 16 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="rounded-[36px] border border-white/10 bg-[linear-gradient(135deg,rgba(8,15,29,0.98),rgba(9,17,31,0.7))] p-8 shadow-[0_30px_120px_rgba(2,6,23,0.5)]"
-        >
-          <p className="text-xs uppercase tracking-[0.4em] text-sky-300">Get started</p>
+        <motion.section initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} className="rounded-[36px] p-8 card">
+          <p className="text-xs uppercase tracking-[0.4em] accent">Get started</p>
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             {['Institution name', 'Primary admin', 'Work email', 'Region'].map((label) => (
-              <label key={label} className="space-y-2 text-sm text-slate-300">
+              <label key={label} className="space-y-2 text-sm muted">
                 <span>{label}</span>
-                <input className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-white outline-none focus:border-sky-400/60" placeholder={label} />
+                <input className="w-full rounded-2xl glass px-4 py-4 text-white outline-none" placeholder={label} />
               </label>
             ))}
           </div>
-          <div className="mt-4 rounded-[24px] border border-cyan-400/20 bg-cyan-400/10 p-5 text-sm text-cyan-100">
+          <div className="mt-4 rounded-[24px] p-5 glass text-sm accent">
             <Sparkles className="mb-3 h-5 w-5" />
             Premium onboarding automatically enables dashboard, fraud center, and mobile access flows.
           </div>

@@ -2,6 +2,35 @@ export function cn(...classes: Array<string | false | null | undefined>): string
   return classes.filter(Boolean).join(' ');
 }
 
+export const theme = {
+  colors: {
+    background: '#0B1020',
+    surface: '#111827',
+    elevated: '#161F32',
+    primary: '#3B82F6',
+    success: '#10B981',
+    warning: '#F59E0B',
+    danger: '#EF4444',
+    live: '#06B6D4',
+    muted: '#94A3B8',
+    text: '#E6EEF3',
+  },
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32,
+  },
+  typography: {
+    fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
+    hero: 36,
+    title: 22,
+    base: 16,
+    meta: 12,
+  },
+} as const;
+
 export type ConsoleNavItem = {
   label: string;
   href: string;

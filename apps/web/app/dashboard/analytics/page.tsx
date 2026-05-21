@@ -11,8 +11,8 @@ export default function AnalyticsPage() {
     <main className="space-y-8">
       <SectionCard title="Analytics" eyebrow="Institution trends">
         <div className="grid gap-6 xl:grid-cols-2">
-          <div className="rounded-[26px] border border-white/10 bg-slate-950/50 p-4">
-            <p className="mb-4 text-sm text-slate-400">Attendance trend</p>
+          <div className="rounded-[26px] p-4 card">
+            <p className="mb-4 text-sm muted">Attendance trend</p>
             <div className="flex h-[260px] items-end gap-2">
               {attendanceData.map((value, index) => (
                 <div key={index} className="flex-1 items-center">
@@ -25,12 +25,12 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          <div className="rounded-[26px] border border-white/10 bg-slate-950/50 p-4">
-            <p className="mb-4 text-sm text-slate-400">Risk prediction</p>
+          <div className="rounded-[26px] p-4 card">
+            <p className="mb-4 text-sm muted">Risk prediction</p>
             <div className="space-y-4">
               {riskData.map((value, index) => (
                 <div key={index}>
-                  <div className="mb-2 flex items-center justify-between text-sm text-slate-300">
+                  <div className="mb-2 flex items-center justify-between text-sm muted">
                     <span>Period {index + 1}</span>
                     <span>{value}</span>
                   </div>

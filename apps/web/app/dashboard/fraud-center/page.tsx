@@ -21,11 +21,11 @@ export default function FraudCenterPage() {
         <SectionCard title="Anomaly timeline" eyebrow="Escalation trail" action={<TriangleAlert className="h-4 w-4" />}>
           <div className="space-y-4">
             {['GPS drift at 08:42', 'Replay token at 09:11', 'Face mismatch at 09:27', 'Trust restored at 09:41'].map((item, index) => (
-              <div key={item} className="flex items-start gap-4 rounded-[22px] border border-white/10 bg-white/5 p-4">
-                <div className="mt-1 h-3 w-3 rounded-full bg-sky-400" />
+              <div key={item} className="flex items-start gap-4 rounded-[22px] glass p-4">
+                <div className="mt-1 h-3 w-3 rounded-full accent" />
                 <div>
                   <p className="font-medium text-white">{item}</p>
-                  <p className="mt-1 text-sm text-slate-400">Event {index + 1} routed through anti-fraud intelligence.</p>
+                  <p className="mt-1 text-sm muted">Event {index + 1} routed through anti-fraud intelligence.</p>
                 </div>
               </div>
             ))}

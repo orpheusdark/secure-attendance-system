@@ -17,11 +17,11 @@ export default function SessionsPage() {
         <SectionCard title="Session queue" eyebrow="Operational QR state" action={<Shield className="h-4 w-4" />}>
           <div className="space-y-3">
             {sessionRecords.map((session) => (
-              <div key={session.name} className="rounded-[22px] border border-white/10 bg-white/5 p-4">
+              <div key={session.name} className="rounded-[22px] glass p-4">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="font-medium text-white">{session.name}</p>
-                    <p className="mt-1 text-sm text-slate-400">{session.scans} scans · {session.trust}% trust</p>
+                    <p className="mt-1 text-sm muted">{session.scans} scans · {session.trust}% trust</p>
                   </div>
                   <StatusPill tone={session.status === 'live' ? 'emerald' : session.status === 'refreshing' ? 'amber' : 'rose'}>{session.status}</StatusPill>
                 </div>

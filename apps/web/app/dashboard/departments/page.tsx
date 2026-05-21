@@ -8,8 +8,8 @@ export default function DepartmentsPage() {
       <SectionCard title="Departments" eyebrow="Institution comparison" action={<Building2 className="h-4 w-4" />}>
         <div className="space-y-4">
           {departmentRecords.map((department) => (
-            <div key={department.name} className="rounded-[22px] border border-white/10 bg-white/5 p-4">
-              <div className="flex items-center justify-between text-sm text-slate-300">
+            <div key={department.name} className="rounded-[22px] glass p-4">
+              <div className="flex items-center justify-between text-sm muted">
                 <span>{department.name}</span>
                 <span>{department.attendance}% attendance</span>
               </div>

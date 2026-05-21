@@ -25,7 +25,7 @@ export default function AdminDashboardPage() {
   return (
     <main className="space-y-8">
       <SectionCard title="Institution operations" eyebrow="Platform administration" action={<Settings2 className="h-4 w-4" />}>
-        <p className="max-w-3xl text-sm leading-7 text-slate-300">
+        <p className="max-w-3xl text-sm leading-7 muted">
           Centralize users, policies, audit logs, fraud rules, and compliance reporting in a visual system designed for operational trust.
         </p>
       </SectionCard>
@@ -39,8 +39,8 @@ export default function AdminDashboardPage() {
 
       <section className="grid gap-4 md:grid-cols-2">
         {managementActions.map((action) => (
-          <SectionCard key={action.title} title={action.title} eyebrow="Admin control" action={<StatusPill tone={action.tone}>{action.title}</StatusPill>}>
-            <p className="text-sm leading-7 text-slate-400">{action.description}</p>
+            <SectionCard key={action.title} title={action.title} eyebrow="Admin control" action={<StatusPill tone={action.tone}>{action.title}</StatusPill>}>
+            <p className="text-sm leading-7 muted">{action.description}</p>
           </SectionCard>
         ))}
       </section>

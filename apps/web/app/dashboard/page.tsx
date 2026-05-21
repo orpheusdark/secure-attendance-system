@@ -24,25 +24,21 @@ export default function DashboardPage() {
   return (
     <main className="space-y-8">
       <section className="grid gap-6 xl:grid-cols-[1.45fr_0.85fr]">
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="rounded-[32px] border border-white/10 bg-[linear-gradient(135deg,rgba(8,15,29,0.96),rgba(12,21,38,0.72))] p-8 shadow-[0_20px_80px_rgba(2,6,23,0.45)]"
-        >
-          <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.4em] text-sky-300">
+        <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="rounded-[32px] p-8 card">
+          <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.4em] accent">
             <StatusPill tone="emerald">Live operations</StatusPill>
             <span>Operational trust layer</span>
           </div>
           <h1 className="mt-5 max-w-3xl text-4xl font-semibold tracking-tight text-white md:text-5xl">
             Anti-fraud attendance intelligence for modern institutions.
           </h1>
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 md:text-base">
+          <p className="mt-4 max-w-2xl text-sm leading-7 muted md:text-base">
             Monitor QR validity, device trust, anomaly spikes, and attendance quality from a system that feels fast, secure, and always on.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             {liveSignals.map((signal) => (
               <StatusPill key={signal.label} tone={signal.tone}>
-                <span className="uppercase tracking-[0.3em] text-[10px] text-slate-400">{signal.label}</span>
+                <span className="uppercase tracking-[0.3em] text-[10px] muted">{signal.label}</span>
                 <span className="font-medium text-white">{signal.value}</span>
               </StatusPill>
             ))}
@@ -55,9 +51,9 @@ export default function DashboardPage() {
               <MetricCard key={metric.label} {...metric} compact />
             ))}
           </div>
-          <div className="mt-5 rounded-[24px] border border-white/10 bg-white/5 p-4">
-            <div className="flex items-center justify-between text-sm text-slate-300">
-              <span className="flex items-center gap-2"><Activity className="h-4 w-4 text-sky-300" /> Scan freshness</span>
+          <div className="mt-5 rounded-[24px] glass p-4">
+            <div className="flex items-center justify-between text-sm muted">
+              <span className="flex items-center gap-2"><Activity className="h-4 w-4 accent" /> Scan freshness</span>
               <span>Rolling validation every 18 seconds</span>
             </div>
             <div className="mt-4 grid grid-cols-12 gap-2">
