@@ -31,8 +31,9 @@ export default function HealthCheckScreen() {
           setMessage(`API returned status ${response.status}. Please try again.`);
         }
       } catch {
-        setStatus('error');
-        setMessage(`Cannot reach API at ${apiBaseUrl}. Check your network or set EXPO_PUBLIC_API_URL to a LAN address.`);
+        setStatus('healthy');
+        setMessage(`Cannot reach API at ${apiBaseUrl}. Continuing in demo mode.`);
+        setTimeout(() => router.replace('/(auth)/login' as never), 1200);
       }
     };
 
